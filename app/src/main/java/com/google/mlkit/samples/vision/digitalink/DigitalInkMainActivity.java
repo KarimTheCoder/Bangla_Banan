@@ -21,6 +21,7 @@ import java.util.Set;
 /** Main activity which creates a StrokeManager and connects it to the DrawingView. */
 public class DigitalInkMainActivity extends AppCompatActivity
     implements DownloadedModelsChangedListener {
+  public static final String BANGLA_LANG_CODE = "bn";
   private static final String TAG = "MLKDI.Activity";
   private static final String GESTURE_EXTENSION = "-x-gesture";
   private static final ImmutableMap<String, String> NON_TEXT_MODELS =
@@ -32,14 +33,12 @@ public class DigitalInkMainActivity extends AppCompatActivity
           "zxx-Zsym-x-shapes",
           "Shapes");
   @VisibleForTesting final StrokeManager strokeManager = new StrokeManager();
-  private ArrayAdapter<ModelLanguageContainer> languageAdapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_digital_ink_main);
 
-    Spinner languageSpinner = findViewById(R.id.languages_spinner);
 
     DrawingView drawingView = findViewById(R.id.drawing_view);
     StatusTextView statusTextView = findViewById(R.id.status_text_view);
@@ -52,29 +51,9 @@ public class DigitalInkMainActivity extends AppCompatActivity
     strokeManager.setClearCurrentInkAfterRecognition(true);
     strokeManager.setTriggerRecognitionAfterInput(false);
 
-    languageAdapter = populateLanguageAdapter();
-    languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-    languageSpinner.setAdapter(languageAdapter);
     strokeManager.refreshDownloadedModelsStatus();
-
-    languageSpinner.setOnItemSelectedListener(
-        new OnItemSelectedListener() {
-          @Override
-          public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            String languageCode =
-                ((ModelLanguageContainer) parent.getAdapter().getItem(position)).getLanguageTag();
-            if (languageCode == null) {
-              return;
-            }
-            Log.i(TAG, "Selected language: " + languageCode);
-            strokeManager.setActiveModel(languageCode);
-          }
-
-          @Override
-          public void onNothingSelected(AdapterView<?> parent) {
-            Log.i(TAG, "No language selected");
-          }
-        });
+    strokeManager.setActiveModel(BANGLA_LANG_CODE);
+    strokeManager.download();
 
     strokeManager.reset();
   }
@@ -95,6 +74,11 @@ public class DigitalInkMainActivity extends AppCompatActivity
 
   public void deleteClick(View v) {
     strokeManager.deleteActiveModel();
+  }
+
+  @Override
+  public void onDownloadedModelsChanged(Set<String> downloadedLanguageTags) {
+
   }
 
   private static class ModelLanguageContainer implements Comparable<ModelLanguageContainer> {
@@ -147,14 +131,7 @@ public class DigitalInkMainActivity extends AppCompatActivity
     }
   }
 
-  @Override
-  public void onDownloadedModelsChanged(Set<String> downloadedLanguageTags) {
-    for (int i = 0; i < languageAdapter.getCount(); i++) {
-      ModelLanguageContainer container = languageAdapter.getItem(i);
-      container.setDownloaded(downloadedLanguageTags.contains(container.languageTag));
-    }
-    languageAdapter.notifyDataSetChanged();
-  }
+
 
   private ArrayAdapter<ModelLanguageContainer> populateLanguageAdapter() {
     ArrayAdapter<ModelLanguageContainer> languageAdapter =
@@ -192,7 +169,9 @@ public class DigitalInkMainActivity extends AppCompatActivity
     for (DigitalInkRecognitionModelIdentifier modelIdentifier :
         DigitalInkRecognitionModelIdentifier.allModelIdentifiers()) {
       if (!modelIdentifier.getLanguageTag().endsWith(GESTURE_EXTENSION)) {
+
         continue;
+
       }
 
       gestureModels.add(buildModelContainer(modelIdentifier, "Script gesture classifier"));
