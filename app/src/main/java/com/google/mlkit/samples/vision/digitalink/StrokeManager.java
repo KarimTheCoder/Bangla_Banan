@@ -95,7 +95,7 @@ public class StrokeManager {
   private void commitResult() {
     if (recognitionTask.done() && recognitionTask.result() != null) {
       content.add(recognitionTask.result());
-      setStatus("Successful recognition: " + recognitionTask.result().text);
+      setStatus(recognitionTask.result().text);
       if (clearCurrentInkAfterRecognition) {
         resetCurrentInk();
       }
