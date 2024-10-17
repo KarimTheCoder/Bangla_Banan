@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink;
+package com.google.mlkit.samples.vision.digitalink.api;
 
 import android.util.Log;
 import androidx.annotation.Nullable;

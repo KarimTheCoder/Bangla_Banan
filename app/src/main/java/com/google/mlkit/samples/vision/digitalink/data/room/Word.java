@@ -1,9 +1,16 @@
-package model;
+package com.google.mlkit.samples.vision.digitalink.data.room;
 
+
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "list_word")
 public class Word {
 
-    private String word;
-    private boolean starred;
+    @PrimaryKey(autoGenerate = true)
+     int id;
+     String word;
+     boolean starred;
 
     public Word(String word) {
         this.word = word;

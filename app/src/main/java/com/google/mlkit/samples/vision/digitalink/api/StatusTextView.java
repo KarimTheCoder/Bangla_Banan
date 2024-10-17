@@ -1,10 +1,10 @@
-package com.google.mlkit.samples.vision.digitalink;
+package com.google.mlkit.samples.vision.digitalink.api;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import com.google.mlkit.samples.vision.digitalink.StrokeManager.StatusChangedListener;
+import com.google.mlkit.samples.vision.digitalink.api.StrokeManager.StatusChangedListener;
 
 /**
  * Status bar for the test app.

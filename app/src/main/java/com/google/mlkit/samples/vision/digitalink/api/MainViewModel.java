@@ -1,5 +1,7 @@
-package com.google.mlkit.samples.vision.digitalink;
+package com.google.mlkit.samples.vision.digitalink.api;
 
+import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -9,15 +11,16 @@ import androidx.lifecycle.ViewModel;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
-import model.Word;
+import com.google.mlkit.samples.vision.digitalink.data.room.Word;
 
 public class MainViewModel extends ViewModel {
 
     public static final String BN_Language = "bn";
     public static final String TAG = MainViewModel.class.getSimpleName();
-
+    TextToSpeech tts;
     private String writtenWord;
     private String randoWord = "মানুষ";
 
@@ -45,7 +48,7 @@ public class MainViewModel extends ViewModel {
 
     }
 
-    public String matchWord(){
+    public String matchWord(Context context){
 
         // Normalize both strings
         String normalizedString1 = Normalizer.normalize(writtenWord, Normalizer.Form.NFC);
@@ -53,7 +56,7 @@ public class MainViewModel extends ViewModel {
 
         // Use equals() to compare normalized strings
         if (normalizedString1.equals(normalizedString2)) {
-            next();
+            next(context);
             return "Strings are equal.";
 
         } else {
@@ -99,13 +102,14 @@ public class MainViewModel extends ViewModel {
         return index < wordList.size();
     }
 
-    public void next(){
+    public void next(Context context){
 
         currentIndex++;
         if(nextWordExists(currentIndex)){
             Word nextWord = getNextWord(currentIndex);
             if (nextWord != null) {
                 updateCurrentWord(nextWord);
+                speak(context);
             }else {
 
                 Log.w(TAG, "getNextWord returned null");
@@ -131,6 +135,40 @@ public class MainViewModel extends ViewModel {
             // Handle null gracefully
             return null;
         }
+    }
+
+    public void speak(Context context){
+        String word = Objects.requireNonNull(_currentWordLiveData.getValue()).getWord();
+
+
+        tts = new TextToSpeech(context, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    // TTS initialization succeeded
+                    int result = tts.setLanguage(Locale.forLanguageTag("bn-BD")); // Set Bengali (Bangladesh) language
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        // Language data is missing or not supported  
+
+                        Log.e("TTS", "Language not supported");
+                    } else {
+                        // Language is supported
+                        // Speak the text
+
+
+
+                        if( word != null){
+                            tts.speak(word, TextToSpeech.QUEUE_FLUSH, null,null);
+
+                        }
+                    }
+                } else {
+                    // TTS initialization failed
+                    Log.e("TTS", "TTS initialization failed");
+                }
+            }
+        });
+
     }
 
 }

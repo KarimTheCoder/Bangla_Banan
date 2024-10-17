@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink;
+package com.google.mlkit.samples.vision.digitalink.api;
 
 import android.os.Handler;
 import android.util.Log;

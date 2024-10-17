@@ -1,41 +1,31 @@
-package com.google.mlkit.samples.vision.digitalink;
+package com.google.mlkit.samples.vision.digitalink.api;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.mlkit.samples.vision.digitalink.StrokeManager.DownloadedModelsChangedListener;
-import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModelIdentifier;
-import java.util.Locale;
+import com.google.mlkit.samples.vision.digitalink.R;
+import com.google.mlkit.samples.vision.digitalink.api.StrokeManager.DownloadedModelsChangedListener;
+
 import java.util.Set;
 
-import model.Word;
+import com.google.mlkit.samples.vision.digitalink.data.room.Word;
 
 /** Main activity which creates a StrokeManager and connects it to the DrawingView. */
 public class DigitalInkMainActivity extends AppCompatActivity
     implements View.OnClickListener,DownloadedModelsChangedListener, StrokeManager.StatusChangedListener {
   public static final String BANGLA_LANG_CODE = "bn";
   private Button match;
-  private ImageButton next;
+  private ImageButton next, speak;
   private MainViewModel mainViewModel;
   private TextView currentWordTextView;
   private  DrawingView drawingView;
@@ -52,8 +42,10 @@ public class DigitalInkMainActivity extends AppCompatActivity
 
 
     match = findViewById(R.id.match_button);
+    speak = findViewById(R.id.speaker_button);
     next = findViewById(R.id.next_button);
     next.setOnClickListener(this);
+    speak.setOnClickListener(this);
     match.setOnClickListener(this);
 
 
@@ -115,7 +107,7 @@ public class DigitalInkMainActivity extends AppCompatActivity
 
     if (view == match){
 
-        String result = mainViewModel.matchWord();
+        String result = mainViewModel.matchWord(this);
         if(result.equalsIgnoreCase("Strings are equal.")){
             strokeManager.reset();
             drawingView.clear();
@@ -126,7 +118,13 @@ public class DigitalInkMainActivity extends AppCompatActivity
 
     if( view == next){
 
-      mainViewModel.next();
+      mainViewModel.next(this);
+
+    }
+
+    if( view == speak){
+
+      mainViewModel.speak(this);
 
     }
 
