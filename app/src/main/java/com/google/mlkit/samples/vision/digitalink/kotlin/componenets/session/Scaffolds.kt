@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets
+package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,9 +10,24 @@ import kotlinx.coroutines.CoroutineScope
 
 // Function to create TopAppBar and Scaffold
 @Composable
-fun MyScaffold(drawerState: DrawerState, scope: CoroutineScope) {
+fun SessionScaffold(drawerState: DrawerState, scope: CoroutineScope) {
     Scaffold(
         topBar = { SessionTopBar(drawerState, scope) }
+    ) { paddingValues ->
+        Column(modifier = Modifier.padding(paddingValues)) {
+
+            SegmentedButton()
+            TitleListDemo()
+
+        }
+
+    }
+}
+
+@Composable
+fun EditScaffold() {
+    Scaffold(
+        topBar = { EditTopBar() }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
 

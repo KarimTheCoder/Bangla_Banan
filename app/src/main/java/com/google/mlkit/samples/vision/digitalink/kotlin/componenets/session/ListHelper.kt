@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets
+package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session
 
 import android.util.Log
 import androidx.compose.foundation.clickable

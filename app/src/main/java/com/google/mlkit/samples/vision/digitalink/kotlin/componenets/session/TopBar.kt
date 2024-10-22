@@ -1,8 +1,12 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets
+package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DrawerState
@@ -44,3 +48,31 @@ import kotlinx.coroutines.launch
             }
         )
     }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EditTopBar() {
+    TopAppBar(
+        title = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Edit")
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+
+            }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        },
+        actions = {
+            IconButton(onClick = { }) {
+                Icon(Icons.Default.Check, contentDescription = "More options")
+            }
+        }
+    )
+}
