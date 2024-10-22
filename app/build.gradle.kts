@@ -83,8 +83,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    val roomVersion = "2.5.2"
+    implementation ("androidx.navigation:navigation-compose:2.8.2")
+    implementation ("androidx.navigation:navigation-fragment-ktx:2.8.2")
+    val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
 
