@@ -76,3 +76,30 @@ fun EditTopBar() {
         }
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PracticeTopBar() {
+    TopAppBar(
+        title = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Practice")
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+
+            }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        },
+        actions = {
+            IconButton(onClick = { }) {
+                Icon(Icons.Default.Check, contentDescription = "More options")
+            }
+        }
+    )
+}

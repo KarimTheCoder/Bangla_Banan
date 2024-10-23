@@ -79,6 +79,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.4")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.09.03"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")

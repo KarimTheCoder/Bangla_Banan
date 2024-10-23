@@ -53,6 +53,12 @@ class StrokeManager {
   private var downloadedModelsChangedListener: DownloadedModelsChangedListener? = null
   private var triggerRecognitionAfterInput = true
   private var clearCurrentInkAfterRecognition = true
+  var text: String? = ""
+    private set(value) {
+      field = value
+      statusChangedListener?.onStatusChanged()
+    }
+
   var status: String? = ""
     private set(newStatus) {
       field = newStatus
@@ -89,6 +95,7 @@ class StrokeManager {
     recognitionTask!!.result()?.let {
       content.add(it)
       status = "Successful recognition: " + it.text
+      text = it.text
       if (clearCurrentInkAfterRecognition) {
         resetCurrentInk()
       }
