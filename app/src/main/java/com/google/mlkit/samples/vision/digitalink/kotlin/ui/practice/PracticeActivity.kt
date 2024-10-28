@@ -42,7 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.MyXmlButtonView
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.PracticeTopBar
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.PracticeTopBar
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 
 
@@ -65,16 +65,16 @@ class PracticeActivity : ComponentActivity() , StrokeManager.StatusChangedListen
                     strokeManager.setClearCurrentInkAfterRecognition(true)
                     strokeManager.setTriggerRecognitionAfterInput(false)
 
-                    Column {
-
-                        PracticeTopBar()
-                        TwoBoxesWithLines()
-                        HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, viewModel)
-
-                        MyXmlButtonView(strokeManager,viewModel)
-
-
-                    }
+//                    Column {
+//
+//                        PracticeTopBar()
+//                        TwoBoxesWithLines()
+//                        HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, viewModel)
+//
+//                        MyXmlButtonView(strokeManager,viewModel)
+//
+//
+//                    }
 
                 }
             }

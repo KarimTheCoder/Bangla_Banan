@@ -1,5 +1,7 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.list
 
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +20,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.MainViewModel
+import androidx.navigation.NavController
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.edit.EditActivity
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.MainViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.practice.PracticeActivity
 
 
 @Composable
@@ -57,7 +62,7 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 }
 
 @Composable
-fun DemoNormalList() {
+fun DemoNormalList(navController: NavController) {
     val titles = listOf(
         "Title 1",
         "Title 2",
@@ -76,9 +81,15 @@ fun DemoNormalList() {
 
         if(isPractice){
 
+            navController.navigate("practice_screen")
+
+
+
             Log.d("TitleListDemo", "Clicked on: $title going to practice")
 
         }else{
+
+            navController.navigate("edit_screen")
 
             Log.d("TitleListDemo", "Clicked on: $title going to Edit")
 

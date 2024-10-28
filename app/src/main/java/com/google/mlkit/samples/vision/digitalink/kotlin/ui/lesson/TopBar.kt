@@ -1,9 +1,11 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.session
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -17,6 +19,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -50,7 +53,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SessionCompleteTopBar(drawerState: DrawerState, scope: CoroutineScope) {
+fun SessionCompleteTopBar(navController: NavController, drawerState: DrawerState, scope: CoroutineScope) {
     TopAppBar(
         title = {
             Box(
@@ -68,7 +71,7 @@ fun SessionCompleteTopBar(drawerState: DrawerState, scope: CoroutineScope) {
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = { navController.navigate("home_screen") }) {
                 Icon(Icons.Outlined.Home, contentDescription = "Home")
             }
         }
@@ -79,7 +82,7 @@ fun SessionCompleteTopBar(drawerState: DrawerState, scope: CoroutineScope) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditTopBar() {
+fun EditTopBar(navController: NavController) {
     TopAppBar(
         title = {
             Box(
@@ -90,9 +93,7 @@ fun EditTopBar() {
             }
         },
         navigationIcon = {
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = { navController.popBackStack() }) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         },
@@ -106,7 +107,7 @@ fun EditTopBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PracticeTopBar() {
+fun PracticeTopBar(navController: NavController) {
     TopAppBar(
         title = {
             Box(
@@ -117,15 +118,13 @@ fun PracticeTopBar() {
             }
         },
         navigationIcon = {
-            IconButton(onClick = {
-
-            }) {
+            IconButton(onClick = { navController.popBackStack()}) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
             }
         },
         actions = {
-            IconButton(onClick = { }) {
-                Icon(Icons.Default.Check, contentDescription = "More options")
+            IconButton(onClick = { navController.navigate("complete_screen")}) {
+                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "More options")
             }
         }
     )

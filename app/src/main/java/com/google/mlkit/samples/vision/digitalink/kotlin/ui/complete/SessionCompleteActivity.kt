@@ -1,11 +1,11 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.complete
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
@@ -18,8 +18,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.MyDrawerLayout
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.SessionCompletedScaffold
+import androidx.navigation.NavController
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.MyDrawerLayout
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.SessionCompletedScaffold
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.list.DemoNormalList
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 
@@ -33,11 +34,11 @@ class SessionCompleteActivity : ComponentActivity() {
 
 
 
-                        MyDrawerLayout { drawerState, scope ->
-                            SessionCompletedScaffold(drawerState, scope)
-                        }
-
-
+//                        MyDrawerLayout { drawerState, scope ->
+//                            SessionCompletedScaffold(this, drawerState, scope)
+//                        }
+//
+//
 
 
 
@@ -50,7 +51,7 @@ class SessionCompleteActivity : ComponentActivity() {
 }
 
 @Composable
-fun ToggleSegmentedButton() {
+fun ToggleSegmentedButton(navController: NavController) {
     // Boolean state for visibility
     // Boolean state for visibility
 
@@ -67,7 +68,7 @@ fun ToggleSegmentedButton() {
             enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),  // Slide in from the right
             exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut()   // Slide out to the right
         ) {
-            DemoNormalList()
+            DemoNormalList(navController)
         }
 
         // Animate appearance and disappearance of ScrollableListWithFixedButtons sliding from the right

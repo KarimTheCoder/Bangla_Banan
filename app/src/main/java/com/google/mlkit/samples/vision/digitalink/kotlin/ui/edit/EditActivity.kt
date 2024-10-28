@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.EditSegmentedButton
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.EditTopBar
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.EditSegmentedButton
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.EditTopBar
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 
 class EditActivity : ComponentActivity() {
@@ -24,9 +24,8 @@ class EditActivity : ComponentActivity() {
                     Column {
 
 
-                        EditTopBar()
-                        EditSegmentedButton()
-                        TypeInput()
+
+
                     }
 
                 }
