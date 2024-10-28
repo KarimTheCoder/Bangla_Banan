@@ -1,9 +1,8 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw
 
 import android.content.Context
 import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager.StatusChangedListener
 
 /**
