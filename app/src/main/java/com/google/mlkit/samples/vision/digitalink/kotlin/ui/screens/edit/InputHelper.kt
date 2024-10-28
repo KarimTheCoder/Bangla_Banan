@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.edit
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.list.DemoTrailList
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
 
 @Composable
 fun TypeInput() {

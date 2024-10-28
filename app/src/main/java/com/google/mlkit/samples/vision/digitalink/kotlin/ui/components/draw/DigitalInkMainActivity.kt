@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

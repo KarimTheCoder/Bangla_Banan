@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.list
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.complete
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.list.ListItemWithTrail
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.ListItemWithTrail
 
 @Composable
 fun ResultUI(items: List<String>, onButton1Click: () -> Unit, onButton2Click: () -> Unit) {

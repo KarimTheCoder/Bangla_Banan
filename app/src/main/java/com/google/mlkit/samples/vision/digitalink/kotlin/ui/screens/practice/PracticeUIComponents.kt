@@ -1,10 +1,5 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.practice
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
-import android.os.Bundle
-import android.util.Log
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -13,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,11 +17,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -40,62 +33,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.MyXmlButtonView
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson.PracticeTopBar
-import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 
 
-class PracticeActivity : ComponentActivity() , StrokeManager.StatusChangedListener{
-
-    private lateinit var viewModel: PracticeViewModel
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MLKitDigitalInkRecognitionDemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                   viewModel = PracticeViewModel()
-                    viewModel.initializeDrawingRecognition()
-                    val strokeManager = viewModel.strokeManager
-                    strokeManager.setStatusChangedListener(this)
-                    strokeManager.setClearCurrentInkAfterRecognition(true)
-                    strokeManager.setTriggerRecognitionAfterInput(false)
-
-//                    Column {
-//
-//                        PracticeTopBar()
-//                        TwoBoxesWithLines()
-//                        HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, viewModel)
-//
-//                        MyXmlButtonView(strokeManager,viewModel)
-//
-//
-//                    }
-
-                }
-            }
-        }
-    }
-
-    override fun onStatusChanged() {
-
-        val strokeManager = viewModel.strokeManager
-
-        strokeManager.text?.let { viewModel.updateText(it) }
-
-
-        Log.i("regtag","status changed: ${strokeManager.text}")
-    }
-}
-
-
-
-
-///-------------------------------------------------------
 @Composable
 fun TwoBoxesWithLines() {
     Column(
@@ -106,7 +46,7 @@ fun TwoBoxesWithLines() {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(150.dp)
-                , // Space for bottom line
+            , // Space for bottom line
             verticalAlignment = Alignment.CenterVertically
         ) {
             // First Box
@@ -130,11 +70,11 @@ fun TwoBoxesWithLines() {
             }
 
             // Vertical divider line
-            Divider(
-                color = Color.Black,
+            HorizontalDivider(
                 modifier = Modifier
                     .width(1.dp)
-                    .fillMaxHeight()
+                    .fillMaxHeight(),
+                color = Color.Black
             )
 
             // Second Box
@@ -150,10 +90,10 @@ fun TwoBoxesWithLines() {
         }
 
         // Horizontal line under the Row
-        Divider(
-            color = Color.Black,
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
             thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth()
+            color = Color.Black
         )
     }
 }
@@ -205,7 +145,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, v
             onClick = {  strokeManager.reset()
                 drawingViewRef.value?.clear()
                 viewModel.updateText("")
-                      },
+            },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Text("Clear")

@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.edit
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateOf

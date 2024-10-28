@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -12,7 +12,7 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager.ContentChangedListener
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager.ContentChangedListener
 import com.google.mlkit.vision.digitalink.Ink
 import com.google.mlkit.vision.digitalink.Ink.Stroke
 

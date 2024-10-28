@@ -1,6 +1,5 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.lesson
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components
 
-import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerState
@@ -8,8 +7,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.complete.ToggleSegmentedButton
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.list.DemoNormalList
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.ToggleSegmentedButton
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
 import kotlinx.coroutines.CoroutineScope
 
 // Function to create TopAppBar and Scaffold

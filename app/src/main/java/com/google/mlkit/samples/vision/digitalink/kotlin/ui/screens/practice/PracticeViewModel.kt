@@ -1,11 +1,11 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.practice
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.DrawingView
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.DrawingView
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 
 class PracticeViewModel: ViewModel() {
 
