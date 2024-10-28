@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.session
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

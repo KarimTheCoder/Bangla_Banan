@@ -19,6 +19,7 @@ import com.google.mlkit.samples.vision.digitalink.api.StrokeManager.DownloadedMo
 import java.util.Set;
 
 import com.google.mlkit.samples.vision.digitalink.data.room.Word;
+import com.google.mlkit.samples.vision.digitalink.kotlin.DrawingView;
 
 /** Main activity which creates a StrokeManager and connects it to the DrawingView. */
 public class DigitalInkMainActivity extends AppCompatActivity
@@ -28,7 +29,7 @@ public class DigitalInkMainActivity extends AppCompatActivity
   private ImageButton next, speak;
   private MainViewModel mainViewModel;
   private TextView currentWordTextView;
-  private  DrawingView drawingView;
+  private DrawingView drawingView;
     @VisibleForTesting final StrokeManager strokeManager = new StrokeManager();
   @Override
   public void onCreate(Bundle savedInstanceState) {

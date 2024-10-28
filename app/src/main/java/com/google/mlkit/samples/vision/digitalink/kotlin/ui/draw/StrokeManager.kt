@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
 
 import android.os.Handler
 import android.os.Message
@@ -8,7 +8,7 @@ import android.view.MotionEvent
 import com.google.android.gms.tasks.SuccessContinuation
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
-import com.google.mlkit.samples.vision.digitalink.kotlin.RecognitionTask.RecognizedInk
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.RecognitionTask.RecognizedInk
 import com.google.mlkit.vision.digitalink.Ink
 import com.google.mlkit.vision.digitalink.Ink.Stroke
 import java.util.ArrayList

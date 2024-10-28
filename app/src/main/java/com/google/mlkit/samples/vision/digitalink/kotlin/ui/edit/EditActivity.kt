@@ -1,27 +1,32 @@
-package com.google.mlkit.samples.vision.digitalink
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.edit
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session.MyDrawerLayout
-import com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session.SessionScaffold
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.EditSegmentedButton
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.EditTopBar
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 
-class MainActivity : ComponentActivity() {
+class EditActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             MLKitDigitalInkRecognitionDemoTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 
-                    MyDrawerLayout { drawerState, scope ->
-                        SessionScaffold(drawerState, scope)
+                    Column {
+
+
+                        EditTopBar()
+                        EditSegmentedButton()
+                        TypeInput()
                     }
 
                 }
@@ -29,4 +34,5 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 

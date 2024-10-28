@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.api;
+package com.google.mlkit.samples.vision.digitalink.kotlin;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,6 +12,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.google.mlkit.samples.vision.digitalink.api.RecognitionTask;
+import com.google.mlkit.samples.vision.digitalink.api.StrokeManager;
 import com.google.mlkit.samples.vision.digitalink.api.StrokeManager.ContentChangedListener;
 import com.google.mlkit.vision.digitalink.Ink;
 import java.util.List;
@@ -100,7 +103,7 @@ public class DrawingView extends View implements ContentChangedListener {
     return bb;
   }
 
-  void setStrokeManager(StrokeManager strokeManager) {
+  public void setStrokeManager(StrokeManager strokeManager) {
     this.strokeManager = strokeManager;
   }
 

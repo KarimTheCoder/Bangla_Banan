@@ -1,16 +1,12 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.draw
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.mlkit.samples.vision.digitalink.PracticeViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.DrawingView
-import com.google.mlkit.samples.vision.digitalink.kotlin.StrokeManager
-import java.lang.reflect.Modifier
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.practice.PracticeViewModel
 
 
 @Composable

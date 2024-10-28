@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.edit
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.edit
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Box
@@ -30,7 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.samples.vision.digitalink.EditViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.list.DemoTrailList
 
 @Composable
 fun TypeInput() {
@@ -69,7 +69,7 @@ fun TypeInput() {
 
         // Pass the text value to the button's onClick function
         AddButton(onClick = { viewModel.updateText(text) })
-        DemoEditList()
+        DemoTrailList()
     }
 }
 

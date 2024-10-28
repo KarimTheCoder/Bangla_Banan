@@ -3,7 +3,8 @@ package com.google.mlkit.samples.vision.digitalink.kotlin
 import android.content.Context
 import androidx.appcompat.widget.AppCompatTextView
 import android.util.AttributeSet
-import com.google.mlkit.samples.vision.digitalink.kotlin.StrokeManager.StatusChangedListener
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager.StatusChangedListener
 
 /**
  * Status bar for the test app.

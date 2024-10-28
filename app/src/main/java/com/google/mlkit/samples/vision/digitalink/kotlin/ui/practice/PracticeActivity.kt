@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.practice
 
 import android.os.Bundle
 import android.util.Log
@@ -40,15 +40,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.StrokeManager
-import com.google.mlkit.samples.vision.digitalink.kotlin.componenets.draw.MyXmlButtonView
-import com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session.PracticeTopBar
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.StrokeManager
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw.MyXmlButtonView
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.PracticeTopBar
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 
 
-class PracticeActivity : ComponentActivity() ,StrokeManager.StatusChangedListener{
+class PracticeActivity : ComponentActivity() , StrokeManager.StatusChangedListener{
 
-    private lateinit var viewModel:PracticeViewModel
+    private lateinit var viewModel: PracticeViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -189,7 +189,7 @@ fun RevealTextButton() {
 }
 
 @Composable
-fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager,viewModel: PracticeViewModel) {
+fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, viewModel: PracticeViewModel) {
     val drawingViewRef = viewModel.drawingViewRef
 
     val text by viewModel.text.observeAsState("")

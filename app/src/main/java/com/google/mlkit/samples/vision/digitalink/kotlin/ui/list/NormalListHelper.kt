@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.session
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.list
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -18,24 +18,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.MainViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.session.MainViewModel
 
 
 @Composable
-fun TitleList(titles: List<String>, onItemClick: (String) -> Unit) {  // Add onItemClick callback
+fun NormalList(titles: List<String>, onItemClick: (String) -> Unit) {  // Add onItemClick callback
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 16.dp)  // Fill the available space
     ) {
         items(titles) { title ->
-            TitleItem(title = title, onItemClick = { onItemClick(title) })  // Pass click callback
+            NormalListItem(title = title, onItemClick = { onItemClick(title) })  // Pass click callback
         }
     }
 }
 
 @Composable
-fun TitleItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick callback
+fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick callback
 
     Card(
         modifier = Modifier
@@ -57,7 +57,7 @@ fun TitleItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick call
 }
 
 @Composable
-fun TitleListDemo() {
+fun DemoNormalList() {
     val titles = listOf(
         "Title 1",
         "Title 2",
@@ -71,7 +71,7 @@ fun TitleListDemo() {
     // Use the ViewModel to observe state, call functions, etc.
     val isPractice by myViewModel.isPractice.collectAsState()
 
-    TitleList(titles = titles, onItemClick = { title ->
+    NormalList(titles = titles, onItemClick = { title ->
         // Handle the item click, for example, show a toast or log the title
 
         if(isPractice){

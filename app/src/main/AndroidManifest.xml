@@ -14,37 +14,40 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
         <activity
-            android:name=".PracticeActivity"
+            android:name=".kotlin.ui.complete.SessionCompleteActivity"
+            android:exported="true"
+            android:label="@string/title_activity_session_complete"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+        <activity
+            android:name=".kotlin.ui.practice.PracticeActivity"
             android:exported="true"
             android:label="@string/title_activity_practice"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
-            android:name=".EditActivity"
+            android:name=".kotlin.ui.edit.EditActivity"
             android:exported="true"
             android:label="@string/title_activity_edit"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        </activity>
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".kotlin.ui.session.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_main"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        </activity>
-        <activity
-            android:name=".kotlin.DigitalInkMainActivity"
-            android:exported="true"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.DayNight"
-            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+
+
+        <activity
+            android:name=".kotlin.ui.draw.DigitalInkMainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.AppCompat.DayNight">
+
         </activity>
     </application>
 

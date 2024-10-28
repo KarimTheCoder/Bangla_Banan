@@ -53,7 +53,7 @@
         android:text="Status text..."
         android:textIsSelectable="true" />
 
-    <com.google.mlkit.samples.vision.digitalink.api.DrawingView
+    <com.google.mlkit.samples.vision.digitalink.kotlin.DrawingView
         android:id="@+id/drawing_view"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/status_text_view"

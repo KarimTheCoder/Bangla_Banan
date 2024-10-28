@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.componenets.edit
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,16 +25,16 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun ListWithTrashIcon(titles: List<String>, onDeleteClick: (String) -> Unit) {
+fun ListWithTrail(titles: List<String>, onDeleteClick: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(titles) { title ->
-            ListItemWithTrashIcon(title = title, onDeleteClick = onDeleteClick)
+            ListItemWithTrail(title = title, onTrailClick = onDeleteClick)
         }
     }
 }
 
 @Composable
-fun ListItemWithTrashIcon(title: String, onDeleteClick: (String) -> Unit) {
+fun ListItemWithTrail(title: String, onTrailClick: (String) -> Unit) {
 
     Card(
         modifier = Modifier
@@ -58,7 +57,7 @@ fun ListItemWithTrashIcon(title: String, onDeleteClick: (String) -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f) // Pushes the icon to the end
             )
-            IconButton(onClick = { onDeleteClick(title) }) {
+            IconButton(onClick = { onTrailClick(title) }) {
                 Icon(
                     imageVector = Icons.Outlined.Delete, // Trash icon
                     contentDescription = "Delete $title",
@@ -66,16 +65,13 @@ fun ListItemWithTrashIcon(title: String, onDeleteClick: (String) -> Unit) {
                 )
             }
         }
-
     }
-
 }
-
 @Composable
-fun DemoEditList() {
+fun DemoTrailList() {
     val titles = listOf("Item 1", "Item 2", "Item 3")
 
-    ListWithTrashIcon(titles = titles, onDeleteClick = { item ->
+    ListWithTrail(titles = titles, onDeleteClick = { item ->
         // Handle delete action for the clicked item
         println("Deleted: $item")
     })

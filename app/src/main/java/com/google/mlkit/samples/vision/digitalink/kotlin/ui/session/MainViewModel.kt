@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.session
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

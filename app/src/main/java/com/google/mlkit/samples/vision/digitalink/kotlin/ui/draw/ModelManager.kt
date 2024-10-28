@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
 
 import android.util.Log
 import com.google.android.gms.tasks.SuccessContinuation

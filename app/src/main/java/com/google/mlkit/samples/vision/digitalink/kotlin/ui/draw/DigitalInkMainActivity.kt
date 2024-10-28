@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.draw
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +12,7 @@ import androidx.annotation.VisibleForTesting
 import com.google.common.collect.ImmutableMap
 import com.google.common.collect.ImmutableSortedSet
 import com.google.mlkit.samples.vision.digitalink.R
+import com.google.mlkit.samples.vision.digitalink.kotlin.StatusTextView
 import com.google.mlkit.vision.digitalink.DigitalInkRecognitionModelIdentifier
 import java.util.Locale
 
@@ -139,7 +140,12 @@ class DigitalInkMainActivity : AppCompatActivity(), StrokeManager.DownloadedMode
 
     // Add non-text models
     for (languageTag in NON_TEXT_MODELS.keys) {
-      languageAdapter.add(ModelLanguageContainer.createModelContainer(NON_TEXT_MODELS[languageTag]!!, languageTag))
+      languageAdapter.add(
+          ModelLanguageContainer.createModelContainer(
+              NON_TEXT_MODELS[languageTag]!!,
+              languageTag
+          )
+      )
     }
 
     // Add text models
@@ -147,7 +153,7 @@ class DigitalInkMainActivity : AppCompatActivity(), StrokeManager.DownloadedMode
     val textModels = ImmutableSortedSet.naturalOrder<ModelLanguageContainer>()
     for (modelIdentifier in DigitalInkRecognitionModelIdentifier.allModelIdentifiers()) {
       if (NON_TEXT_MODELS.containsKey(modelIdentifier.languageTag)) continue
-      if (modelIdentifier.languageTag.endsWith(Companion.GESTURE_EXTENSION)) continue
+      if (modelIdentifier.languageTag.endsWith(GESTURE_EXTENSION)) continue
       textModels.add(buildModelContainer(modelIdentifier, "Script"))
     }
     languageAdapter.addAll(textModels.build())
@@ -156,7 +162,7 @@ class DigitalInkMainActivity : AppCompatActivity(), StrokeManager.DownloadedMode
     languageAdapter.add(ModelLanguageContainer.createLabelOnly("Gesture Models"))
     val gestureModels = ImmutableSortedSet.naturalOrder<ModelLanguageContainer>()
     for (modelIdentifier in DigitalInkRecognitionModelIdentifier.allModelIdentifiers()) {
-      if (!modelIdentifier.languageTag.endsWith(Companion.GESTURE_EXTENSION)) continue
+      if (!modelIdentifier.languageTag.endsWith(GESTURE_EXTENSION)) continue
       gestureModels.add(buildModelContainer(modelIdentifier, "Script gesture classifier"))
     }
     languageAdapter.addAll(gestureModels.build())
@@ -178,7 +184,10 @@ class DigitalInkMainActivity : AppCompatActivity(), StrokeManager.DownloadedMode
       label.append(", ").append(modelIdentifier.scriptSubtag).append(" ").append(labelSuffix)
     }
 
-    return ModelLanguageContainer.createModelContainer(label.toString(), modelIdentifier.languageTag)
+    return ModelLanguageContainer.createModelContainer(
+        label.toString(),
+        modelIdentifier.languageTag
+    )
   }
 
   /**
