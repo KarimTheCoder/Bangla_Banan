@@ -135,17 +135,13 @@ private fun WordCard(scale: Float) {
                     .graphicsLayer(scaleX = scale, scaleY = scale), // Scale the first box in place
                 contentAlignment = Alignment.Center
             ) {
-                IconButton(
-                    onClick = {}
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Call,
-                        contentDescription = "Favorite icon",
-                        tint = Color.Black,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
+
+
+                AudioIconButton()
             }
+
+
+
 
             // Vertical divider line
             HorizontalDivider(

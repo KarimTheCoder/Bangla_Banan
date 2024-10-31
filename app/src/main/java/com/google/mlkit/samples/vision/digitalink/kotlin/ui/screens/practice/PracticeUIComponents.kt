@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -43,13 +44,62 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 
 
 
 
 
+@Composable
+fun AudioIconButton() {
+    // Controls whether to show the animation or the icon
+    var showAnimation by remember { mutableStateOf(false) }
 
+    // Lottie composition for the animation
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sound))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = showAnimation
+    )
+
+    // Trigger the delay within a LaunchedEffect when showAnimation changes to true
+    LaunchedEffect(showAnimation) {
+        if (showAnimation) {
+            kotlinx.coroutines.delay(2000) // Show animation for 2 seconds
+            showAnimation = false
+        }
+    }
+
+    // IconButton with logic to toggle between icon and animation
+    IconButton(
+        onClick = {
+            showAnimation = true // Start animation when button is clicked
+        },
+        modifier = Modifier.size(64.dp)
+    ) {
+        if (showAnimation) {
+            // Display Lottie animation
+            LottieAnimation(
+                composition = composition,
+                progress = progress,
+                modifier = Modifier.size(64.dp)
+            )
+        } else {
+            // Display icon
+            Icon(
+                imageVector = Icons.Default.Call,
+                contentDescription = "Favorite icon",
+                tint = Color.Black,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
 
 
 

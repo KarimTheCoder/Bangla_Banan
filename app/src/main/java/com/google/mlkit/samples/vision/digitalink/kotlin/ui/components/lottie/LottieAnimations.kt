@@ -66,3 +66,22 @@ fun WrongAnimation() {
         }
     }
 }
+
+@Composable
+fun AudioAnimation() {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sound))
+    var isPlaying by remember { mutableStateOf(true) }
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        isPlaying = isPlaying
+    )
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+        LottieAnimation(
+            composition = composition,
+            progress = progress,
+            modifier = Modifier.size(200.dp)
+        )
+
+    }
+}
