@@ -23,6 +23,8 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.List
 
 @Composable
 fun ResultUI(items: List<String>, onButton1Click: () -> Unit, onButton2Click: () -> Unit) {
+
+
     Box(modifier = Modifier.padding(top = 16.dp).fillMaxSize()) {
 
         // Scrolling list
@@ -38,33 +40,8 @@ fun ResultUI(items: List<String>, onButton1Click: () -> Unit, onButton2Click: ()
             }
         }
 
-        // Fade effect overlay for the top
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .align(Alignment.TopCenter)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.White, Color.Transparent)
-                    )
-                )
-        )
 
-        // Fade effect overlay for the bottom
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .align(Alignment.BottomCenter)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color.White)
-                    )
-                )
-        )
 
-        // Fixed buttons at the bottom
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

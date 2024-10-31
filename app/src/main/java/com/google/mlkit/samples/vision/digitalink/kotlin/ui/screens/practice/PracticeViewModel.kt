@@ -1,11 +1,19 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.DrawingView
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 class PracticeViewModel: ViewModel() {
 
@@ -38,8 +46,54 @@ class PracticeViewModel: ViewModel() {
         strokeManager.recognize()
     }
 
+    // Mutable background color state
+    private val _backgroundColor = MutableStateFlow(Color.LightGray)
+    val backgroundColor: StateFlow<Color> = _backgroundColor
 
 
+    // Hold visibility state
+    private val _isVisible = MutableStateFlow(true)
+    val isVisible: StateFlow<Boolean> = _isVisible
+
+
+    // Toggle function for visibility
+    fun toggleCorrect() {
+        viewModelScope.launch {
+            _isVisible.value = !_isVisible.value
+
+            if (_isVisible.value == false) {
+                _backgroundColor.value = Color.Green
+                setCardState(CardState.CORRECT)
+                delay(1200) // Wait for 300 milliseconds
+                _backgroundColor.value = Color.LightGray
+                toggleCorrect()
+            }
+        }
+    }
+    // Toggle function for visibility
+    fun toggleWrong() {
+        viewModelScope.launch {
+            _isVisible.value = !_isVisible.value
+            if (_isVisible.value == false) {
+                _backgroundColor.value = Color.Red
+                setCardState(CardState.WRONG)
+                delay(1200) // Wait for 300 milliseconds
+                _backgroundColor.value = Color.LightGray
+                toggleWrong()
+            }
+        }
+    }
+
+
+
+    private val _cardState = MutableLiveData(CardState.SHOW)
+    val cardState: LiveData<CardState> = _cardState
+
+
+    private fun setCardState(cardState: CardState){
+
+        _cardState.value = cardState
+    }
 
 
 

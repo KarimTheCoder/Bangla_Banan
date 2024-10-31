@@ -2,7 +2,9 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.PracticeTopBar
@@ -14,10 +16,9 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.Stro
 fun PracticeScreen(navController: NavController) {
 
 
-    var viewModel: PracticeViewModel = PracticeViewModel()
+    var viewModel = PracticeViewModel()
     viewModel.initializeDrawingRecognition()
     val strokeManager = viewModel.strokeManager
-    //strokeManager.setStatusChangedListener()
     strokeManager.setClearCurrentInkAfterRecognition(true)
     strokeManager.setTriggerRecognitionAfterInput(false)
 
@@ -26,8 +27,6 @@ fun PracticeScreen(navController: NavController) {
 
     val listener = object : StrokeManager.StatusChangedListener {
         override fun onStatusChanged() {
-            //val strokeManager = viewModel.strokeManager // Assuming you have access to the StrokeManager
-
             strokeManager.text?.let { viewModel.updateText(it) }
             Log.i("regtag", "status changed: ${strokeManager.text}")
         }
@@ -37,10 +36,25 @@ fun PracticeScreen(navController: NavController) {
     Column {
 
         PracticeTopBar(navController)
-        TwoBoxesWithLines()
+        TwoBoxesWithLines0(viewModel)
         HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, viewModel)
-
         MyXmlButtonView(strokeManager,viewModel)
+        
+ 
+        Button(onClick = {
+                        viewModel.toggleCorrect()
+            }) {
+            
+            Text(text = "Correct")
+            
+        }
+        Button(onClick = {
+            viewModel.toggleWrong()
+        }) {
+
+            Text(text = "Wrong")
+
+        }
 
 
     }

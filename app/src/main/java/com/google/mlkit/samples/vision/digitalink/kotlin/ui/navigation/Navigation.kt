@@ -23,7 +23,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.Lesso
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.HorizontalLayoutWithTextButtonAndMatchButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeScreen
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.TwoBoxesWithLines
+
 
 
 @Composable

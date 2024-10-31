@@ -1,13 +1,20 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -16,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -24,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -32,71 +41,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 
 
-@Composable
-fun TwoBoxesWithLines() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-            , // Space for bottom line
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // First Box
-            Box(
-                modifier = Modifier
-                    .weight(1f) // Equal width for both boxes
-                    .height(150.dp) // Set height
-                    .background(Color.LightGray),
-                contentAlignment = Alignment.Center
-            ) {
-                IconButton(
-                    onClick = {  } // This triggers the action when the button is clicked
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Call, // Built-in favorite icon
-                        contentDescription = "Favorite icon",
-                        tint = Color.Black, // Optional color for the icon
-                        modifier = Modifier.size(24.dp) // Optional size modifier
-                    )
-                }
-            }
 
-            // Vertical divider line
-            HorizontalDivider(
-                modifier = Modifier
-                    .width(1.dp)
-                    .fillMaxHeight(),
-                color = Color.Black
-            )
 
-            // Second Box
-            Box(
-                modifier = Modifier
-                    .weight(1f) // Equal width for both boxes
-                    .height(150.dp) // Set height
-                    .background(Color.LightGray),
-                contentAlignment = Alignment.Center
-            ) {
-                RevealTextButton()
-            }
-        }
 
-        // Horizontal line under the Row
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            thickness = 1.dp,
-            color = Color.Black
-        )
-    }
-}
+
+
+
+
+
+
 @Composable
 fun RevealTextButton() {
     // State to track whether the text is visible
@@ -127,7 +85,6 @@ fun RevealTextButton() {
         }
     }
 }
-
 @Composable
 fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, viewModel: PracticeViewModel) {
     val drawingViewRef = viewModel.drawingViewRef

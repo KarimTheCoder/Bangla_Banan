@@ -3,6 +3,7 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.components
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerState
@@ -48,7 +49,7 @@ fun MyDrawerLayout(
 fun DrawerContent(drawerState: DrawerState, selectedItem: DrawerItem?, onItemSelect: (DrawerItem) -> Unit) {
     val drawerItems = getDrawerItems()
 
-    ModalDrawerSheet {
+    ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
         Text("Folders", modifier = Modifier.padding(16.dp))
         HorizontalDivider()
         drawerItems.forEach { item ->
