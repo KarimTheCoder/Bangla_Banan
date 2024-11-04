@@ -80,7 +80,7 @@ fun AudioIconButton() {
         onClick = {
             showAnimation = true // Start animation when button is clicked
         },
-        modifier = Modifier.size(64.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
         if (showAnimation) {
             // Display Lottie animation

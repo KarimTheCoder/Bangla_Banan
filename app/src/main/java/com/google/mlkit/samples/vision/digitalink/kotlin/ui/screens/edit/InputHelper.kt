@@ -41,7 +41,9 @@ fun TypeInput() {
     val info by viewModel.text
 
     var text by remember { mutableStateOf("") }
-    val textFieldHeight by animateDpAsState(targetValue = if (isExpanded) 140.dp else 60.dp) // Animated height
+    val textFieldHeight by animateDpAsState(targetValue = if (isExpanded) 140.dp else 80.dp,
+        label = ""
+    ) // Animated height
 
     Column {
         OutlinedTextField(
