@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -61,46 +63,64 @@ android {
     }
 }
 
-
-
-//tasks.register<Delete>("clean") {
-//    delete(rootProject.buildDir)
-//}
-
-
-
 dependencies {
+    // Versions
+    val roomVersion = "2.6.1"
+    val composeBomVersion = "2024.10.01"
 
-    implementation ("com.airbnb.android:lottie-compose:6.6.0")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21")
-    implementation("androidx.paging:paging-common-android:3.3.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
-    implementation("androidx.activity:activity-compose:1.9.3")
-    implementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    // Core & UI Libraries
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("androidx.multidex:multidex:2.0.1")
+
+    // Compose Libraries
+    implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.10.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation ("androidx.navigation:navigation-compose:2.8.3")
-    implementation ("androidx.navigation:navigation-fragment-ktx:2.8.3")
-    val roomVersion = "2.6.1"
-    implementation("androidx.room:room-runtime:2.6.1")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    androidTestImplementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
 
-    implementation("com.google.auto.value:auto-value-annotations:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    annotationProcessor("com.google.auto.value:auto-value:1.11.0")
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.6")
-    implementation("androidx.multidex:multidex:2.0.1")
-    implementation("com.google.guava:guava:33.3.1-android")
-    implementation("androidx.appcompat:appcompat:1.7.0")
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
+
+    // Lifecycle & Paging
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("androidx.paging:paging-common-android:3.3.2")
+
+    // Room (Database)
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // ML Kit
     implementation("com.google.mlkit:digital-ink-recognition:18.1.0")
 
+    // Lottie Animation
+    implementation("com.airbnb.android:lottie-compose:6.6.0")
+
+    // Kotlin & Auto-Value
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21")
+    implementation("com.google.auto.value:auto-value-annotations:1.11.0")
+    kapt("com.google.auto.value:auto-value:1.11.0")
+
+    // Additional Libraries
+    implementation("com.google.guava:guava:33.3.1-android")
+
+    // DI
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+}
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

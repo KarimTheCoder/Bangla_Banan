@@ -33,7 +33,7 @@ fun ToggleSegmentedButton(navController: NavController) {
             enter = slideInHorizontally(initialOffsetX = { it }) + fadeIn(),  // Slide in from the right
             exit = slideOutHorizontally(targetOffsetX = { it }) + fadeOut()   // Slide out to the right
         ) {
-            DemoNormalList(navController)
+            //DemoNormalList(navController, viewModel)
         }
 
         // Animate appearance and disappearance of ScrollableListWithFixedButtons sliding from the right

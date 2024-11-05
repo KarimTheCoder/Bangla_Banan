@@ -31,9 +31,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
+
 
 @Composable
-fun TypeInput() {
+fun TypeInput(cardViewModel: FlashcardViewModel) {
+
+
+
+
     val viewModel: EditViewModel = viewModel()
 
     // Observe isExpanded and text from ViewModel
@@ -70,7 +77,9 @@ fun TypeInput() {
         InfoTextWithIcon(info)
 
         // Pass the text value to the button's onClick function
-        AddButton(onClick = { viewModel.updateText(text) })
+        AddButton(onClick = { viewModel.updateText(text)
+                                cardViewModel.insertFlashcard(Flashcard(word = text))
+        })
         DemoTrailList()
     }
 }

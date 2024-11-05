@@ -15,22 +15,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 
 
 @Composable
-fun NormalList(titles: List<String>, onItemClick: (String) -> Unit) {  // Add onItemClick callback
+fun NormalList(titles: List<Flashcard>, onItemClick: (String) -> Unit) {  // Add onItemClick callback
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 16.dp)  // Fill the available space
     ) {
         items(titles) { title ->
-            NormalListItem(title = title, onItemClick = { onItemClick(title) })  // Pass click callback
+            NormalListItem(title = title.word, onItemClick = { onItemClick(title.word) })  // Pass click callback
         }
     }
 }
@@ -58,7 +61,7 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 }
 
 @Composable
-fun DemoNormalList(navController: NavController) {
+fun DemoNormalList(navController: NavController, viewModel: FlashcardViewModel) {
     val titles = listOf(
         "Title 1",
         "Title 2",
@@ -72,7 +75,9 @@ fun DemoNormalList(navController: NavController) {
     // Use the ViewModel to observe state, call functions, etc.
     val isPractice by myViewModel.isPractice.collectAsState()
 
-    NormalList(titles = titles, onItemClick = { title ->
+    val flashcards by viewModel.allFlashcards.observeAsState(emptyList())
+
+    NormalList(titles = flashcards, onItemClick = { title ->
         // Handle the item click, for example, show a toast or log the title
 
         if(isPractice){

@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -28,7 +27,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,18 +35,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.ToggleSegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 
 // Function to create TopAppBar and Scaffold
 @Composable
-fun MainScaffold(navController: NavController, drawerState: DrawerState, scope: CoroutineScope) {
+fun MainScaffold(
+    navController: NavController,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    viewModel: FlashcardViewModel
+) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }
 
@@ -90,7 +93,7 @@ fun MainScaffold(navController: NavController, drawerState: DrawerState, scope: 
                     }
                 }
 
-                DemoNormalList(navController)
+                DemoNormalList(navController,viewModel)
             }
 
             // FAB with icon and text at the bottom-right
@@ -174,7 +177,7 @@ fun EditScaffold(navController: NavController) {
         Column(modifier = Modifier.padding(paddingValues)) {
 
             SegmentedButton()
-            DemoNormalList(navController)
+            //DemoNormalList(navController, viewModel)
 
         }
 
