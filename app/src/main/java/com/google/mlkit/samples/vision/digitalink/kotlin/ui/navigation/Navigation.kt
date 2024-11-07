@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.MainActivity
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.CompleteScreen
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit.EditScreen
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.LessonScreen
@@ -12,7 +13,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.Pra
 
 
 @Composable
-fun AppNavigation(viewModel: AppFlashcardViewModel) {
+fun AppNavigation(viewModel: AppDatabaseViewModel, mainActivity: MainActivity) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "home_screen")
@@ -26,7 +27,7 @@ fun AppNavigation(viewModel: AppFlashcardViewModel) {
         }
 
         composable("practice_screen") {
-            PracticeScreen( navController)
+            PracticeScreen( navController,mainActivity)
 
         }
         composable("complete_screen") {

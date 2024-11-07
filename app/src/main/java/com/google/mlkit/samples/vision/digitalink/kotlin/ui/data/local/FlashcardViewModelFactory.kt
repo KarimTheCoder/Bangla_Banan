@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 
 class FlashcardViewModelFactory (private val repository: AppRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AppFlashcardViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(AppDatabaseViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return AppFlashcardViewModel(repository) as T
+            return AppDatabaseViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
 

@@ -30,7 +30,6 @@ data class Lesson(
     val folderOwnerId: Long // Foreign key referring to the Folder table
 )
 
-// Flashcard Entity
 @Entity(
     tableName = "flashcard_table",
     foreignKeys = [ForeignKey(
@@ -45,5 +44,8 @@ data class Flashcard(
     @PrimaryKey(autoGenerate = true) val flashcardId: Long = 0,
     val word: String,
     val definition: String,
-    val lessonOwnerId: Long // Foreign key referring to the Lesson table
+    val lessonOwnerId: Long,
+    val isMistake: Boolean = false,
+    var boxLevel: Int = 1, // Starts in the first box by default
+    var dueDate: Long = System.currentTimeMillis() // Next review date, based on box level
 )

@@ -5,10 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.EditSegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.EditTopBar
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 
 @Composable
-fun EditScreen(navController: NavController, viewModel: AppFlashcardViewModel) {
+fun EditScreen(navController: NavController, viewModel: AppDatabaseViewModel) {
 
     Column {
         EditTopBar(navController)

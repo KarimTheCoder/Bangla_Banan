@@ -1,33 +1,33 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
 
-class AppRepository(private val folderDao: FolderDao) {
+class AppRepository(private val appDao: AppDao) {
 
 
     // --- Folder Operations ---
 
     // Insert a folder
     suspend fun insertFolder(folder: Folder) {
-        folderDao.insertFolder(folder)
+        appDao.insertFolder(folder)
     }
 
     // Update a folder
     suspend fun updateFolder(folder: Folder) {
-        folderDao.updateFolder(folder)
+        appDao.updateFolder(folder)
     }
 
     // Get a specific folder by ID
     suspend fun getFolderById(folderId: Long): Folder? {
-        return folderDao.getFolderById(folderId)
+        return appDao.getFolderById(folderId)
     }
 
     // Get all folders
     suspend fun getAllFolders(): List<Folder> {
-        return folderDao.getAllFolders()
+        return appDao.getAllFolders()
     }
 
     // Delete a folder
     suspend fun deleteFolder(folder: Folder) {
-        folderDao.deleteFolder(folder)
+        appDao.deleteFolder(folder)
     }
 
 
@@ -35,32 +35,32 @@ class AppRepository(private val folderDao: FolderDao) {
 
     // Insert a lesson
     suspend fun insertLesson(lesson: Lesson) {
-        folderDao.insertLesson(lesson)
+        appDao.insertLesson(lesson)
     }
 
     // Update a lesson
     suspend fun updateLesson(lesson: Lesson) {
-        folderDao.updateLesson(lesson)
+        appDao.updateLesson(lesson)
     }
 
     // Get a specific lesson by ID
     suspend fun getLessonById(lessonId: Long): Lesson? {
-        return folderDao.getLessonById(lessonId)
+        return appDao.getLessonById(lessonId)
     }
 
     // Get all lessons
     suspend fun getAllLessons(): List<Lesson> {
-        return folderDao.getAllLessons()
+        return appDao.getAllLessons()
     }
 
     // Get all lessons for a specific folder
     suspend fun getLessonsByFolderId(folderId: Long): List<Lesson> {
-        return folderDao.getLessonsByFolderId(folderId)
+        return appDao.getLessonsByFolderId(folderId)
     }
 
     // Delete a lesson
     suspend fun deleteLesson(lesson: Lesson) {
-        folderDao.deleteLesson(lesson)
+        appDao.deleteLesson(lesson)
     }
 
 
@@ -68,31 +68,61 @@ class AppRepository(private val folderDao: FolderDao) {
 
     // Insert a flashcard
     suspend fun insertFlashcard(flashcard: Flashcard) {
-        folderDao.insertFlashcard(flashcard)
+        appDao.insertFlashcard(flashcard)
     }
 
     // Update a flashcard
     suspend fun updateFlashcard(flashcard: Flashcard) {
-        folderDao.updateFlashcard(flashcard)
+        appDao.updateFlashcard(flashcard)
     }
 
     // Get a specific flashcard by ID
     suspend fun getFlashcardById(flashcardId: Long): Flashcard? {
-        return folderDao.getFlashcardById(flashcardId)
+        return appDao.getFlashcardById(flashcardId)
     }
 
     // Get all flashcards
     suspend fun getAllFlashcards(): List<Flashcard> {
-        return folderDao.getAllFlashcards()
+        return appDao.getAllFlashcards()
     }
 
     // Get all flashcards for a specific lesson
     suspend fun getFlashcardsByLessonId(lessonId: Long): List<Flashcard> {
-        return folderDao.getFlashcardsByLessonId(lessonId)
+        return appDao.getFlashcardsByLessonId(lessonId)
     }
 
     // Delete a flashcard
     suspend fun deleteFlashcard(flashcard: Flashcard) {
-        folderDao.deleteFlashcard(flashcard)
+        appDao.deleteFlashcard(flashcard)
+    }
+
+    // Load due flashcards from DAO
+    suspend fun getDueFlashcards(): List<Flashcard> {
+
+        return appDao.getDueFlashcards()
+    }
+
+    // Update a flashcard after review
+    suspend fun updateFlashcardLeitner(flashcard: Flashcard, isCorrect: Boolean) {
+        if (isCorrect) {
+            // Move to the next box level (up to the max level of 5)
+            flashcard.boxLevel = (flashcard.boxLevel + 1).coerceAtMost(5)
+        } else {
+            // Incorrect answer sends the card back to box 1
+            flashcard.boxLevel = 1
+        }
+
+        // Set the due date based on box level
+        val intervalDays = when (flashcard.boxLevel) {
+            1 -> 1
+            2 -> 3
+            3 -> 7
+            4 -> 14
+            else -> 30
+        }
+        flashcard.dueDate = System.currentTimeMillis() + intervalDays * 24 * 60 * 60 * 1000L
+
+        // Update flashcard in database
+        appDao.updateFlashcard(flashcard)
     }
 }

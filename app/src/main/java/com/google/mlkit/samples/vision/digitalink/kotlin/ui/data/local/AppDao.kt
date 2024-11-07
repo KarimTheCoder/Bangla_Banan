@@ -5,11 +5,11 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FolderDao {
+interface AppDao {
 
     // --- Folder CRUD Operations ---
 
@@ -86,4 +86,11 @@ interface FolderDao {
     // Delete a Flashcard
     @Delete
     suspend fun deleteFlashcard(flashcard: Flashcard)
+
+
+
+    @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime")
+    suspend fun getDueFlashcards(currentTime: Long = System.currentTimeMillis()): List<Flashcard>
+
+
 }

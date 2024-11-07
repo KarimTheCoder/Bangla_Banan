@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
@@ -12,8 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppRepository
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.FlashcardViewModelFactory
@@ -40,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val flashcardViewModel: AppFlashcardViewModel
+            val flashcardViewModel: AppDatabaseViewModel
 
             val database = MyAppDatabase.getDatabase(this)
             val repository = AppRepository(database.folderDao())
@@ -48,7 +46,7 @@ class MainActivity : ComponentActivity() {
             flashcardViewModel = ViewModelProvider(
                 this,
                 viewModelFactory
-            )[AppFlashcardViewModel::class.java]
+            )[AppDatabaseViewModel::class.java]
 
             flashcardViewModel.fetchAllFolders()
             flashcardViewModel.fetchAllLessons()
@@ -59,11 +57,11 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
 
 
-                    AppNavigation(flashcardViewModel)
+                    AppNavigation(flashcardViewModel,this)
 
 
 
-                    InsertSampleData(viewModel = flashcardViewModel)
+                   // InsertSampleData(viewModel = flashcardViewModel)
 
                 }
             }
@@ -79,7 +77,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun InsertSampleData(viewModel: AppFlashcardViewModel) {
+fun InsertSampleData(viewModel: AppDatabaseViewModel) {
     Button(onClick = {
         val folder = Folder(folderName = "Science")
         val lesson = Lesson(lessonName = "Biology Basics", folderOwnerId = 1)

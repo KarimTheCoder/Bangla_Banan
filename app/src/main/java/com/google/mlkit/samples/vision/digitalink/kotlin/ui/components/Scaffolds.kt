@@ -42,7 +42,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.ToggleSegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +53,7 @@ fun MainScaffold(
     navController: NavController,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    viewModel: AppFlashcardViewModel
+    viewModel: AppDatabaseViewModel
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }

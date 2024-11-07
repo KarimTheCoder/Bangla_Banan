@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [Folder::class, Lesson::class, Flashcard::class], version = 1, exportSchema = false)
 abstract class MyAppDatabase : RoomDatabase() {
-    abstract fun folderDao(): FolderDao
+    abstract fun folderDao(): AppDao
 
     companion object {
         @Volatile

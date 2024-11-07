@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 
@@ -29,7 +29,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainV
 fun NormalList(
     titles: List<Lesson>,
     onItemClick: (String) -> Unit,
-    viewModel: AppFlashcardViewModel
+    viewModel: AppDatabaseViewModel
 ) {  // Add onItemClick callback
     LazyColumn(
         modifier = Modifier
@@ -74,7 +74,7 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 }
 
 @Composable
-fun DemoNormalList(navController: NavController, viewModel: AppFlashcardViewModel) {
+fun DemoNormalList(navController: NavController, viewModel: AppDatabaseViewModel) {
     val titles = listOf(
         "Title 1",
         "Title 2",

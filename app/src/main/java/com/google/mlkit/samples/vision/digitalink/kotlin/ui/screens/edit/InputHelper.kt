@@ -1,6 +1,5 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,12 +32,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
 
 
 @Composable
-fun TypeInput(cardViewModel: AppFlashcardViewModel) {
+fun TypeInput(cardViewModel: AppDatabaseViewModel) {
 
 
 

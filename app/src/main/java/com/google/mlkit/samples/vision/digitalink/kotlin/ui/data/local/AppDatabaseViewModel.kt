@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
-class AppFlashcardViewModel(private val repository: AppRepository):ViewModel() {
+class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
 
     // --- Folder Operations ---
 

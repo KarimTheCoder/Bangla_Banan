@@ -37,14 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Folder
 import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
 fun MyDrawerLayout(
-    viewModel: AppFlashcardViewModel,
+    viewModel: AppDatabaseViewModel,
     scaffoldContent: @Composable (drawerState: DrawerState, scope: CoroutineScope) -> Unit
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -64,7 +64,7 @@ fun DrawerContent(
     drawerState: DrawerState,
     selectedItem: DrawerItem?,
     onItemSelect: (DrawerItem) -> Unit,
-    viewModel: AppFlashcardViewModel
+    viewModel: AppDatabaseViewModel
 ) {
     val items by viewModel.allFolders.observeAsState(emptyList())
     val drawerItems = getDrawerItems(items)
