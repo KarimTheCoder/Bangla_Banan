@@ -22,13 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
 
 
 @Composable
-fun ListWithTrail(titles: List<String>, onDeleteClick: (String) -> Unit) {
+fun ListWithTrail(titles: List<Flashcard>, onDeleteClick: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(titles) { title ->
-            ListItemWithTrail(title = title, onTrailClick = onDeleteClick)
+            ListItemWithTrail(title = title.word, onTrailClick = onDeleteClick)
         }
     }
 }
@@ -68,10 +69,11 @@ fun ListItemWithTrail(title: String, onTrailClick: (String) -> Unit) {
     }
 }
 @Composable
-fun DemoTrailList() {
+fun DemoTrailList(lessons: List<Flashcard>) {
     val titles = listOf("Item 1", "Item 2", "Item 3")
 
-    ListWithTrail(titles = titles, onDeleteClick = { item ->
+
+    ListWithTrail(titles = lessons, onDeleteClick = { item ->
         // Handle delete action for the clicked item
         println("Deleted: $item")
     })

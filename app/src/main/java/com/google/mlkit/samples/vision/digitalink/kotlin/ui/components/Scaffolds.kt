@@ -28,8 +28,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -40,7 +42,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.ToggleSegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 
@@ -50,7 +53,7 @@ fun MainScaffold(
     navController: NavController,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    viewModel: FlashcardViewModel
+    viewModel: AppFlashcardViewModel
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }
@@ -106,50 +109,61 @@ fun MainScaffold(
                     .padding(16.dp)
             )
 
+
+            val folderId by viewModel.folderId.observeAsState()
+
+
             // Dialog for text input
-            InputDialog(isDialogOpen, inputText)
+            if (isDialogOpen) {
+                AlertDialog(
+                    onDismissRequest = { isDialogOpen = false },
+                    title = { Text("Enter Text") },
+                    text = {
+                        Column {
+                            OutlinedTextField(
+                                value = inputText,
+                                onValueChange = { inputText = it },
+                                label = { Text("Input") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                // Handle OK action here, like saving the inputText
+
+                                //todo needs more safety checks
+                                if( folderId != null){
+                                    val lesson = Lesson(lessonName = inputText, folderOwnerId = folderId!!,)
+                                    viewModel.insertLesson(lesson)
+                                }
+
+
+
+
+                                isDialogOpen = false
+                            }
+                        ) {
+                            Text("OK")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = { isDialogOpen = false }
+                        ) {
+                            Text("Cancel")
+                        }
+                    }
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun InputDialog(isDialogOpen: Boolean, inputText: String) {
-    var isDialogOpen1 = isDialogOpen
-    var inputText1 = inputText
-    if (isDialogOpen1) {
+fun InputDialog(isDialogOpen: MutableState<Boolean>, inputText: MutableState<String>) {
 
-        AlertDialog(
-            onDismissRequest = { isDialogOpen1 = false },
-            title = { Text("Enter Text") },
-            text = {
-                Column {
-                    OutlinedTextField(
-                        value = inputText1,
-                        onValueChange = { inputText1 = it },
-                        label = { Text("Input") },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        // Handle OK action here, like saving the inputText
-                        isDialogOpen1 = false
-                    }
-                ) {
-                    Text("OK")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = { isDialogOpen1 = false }
-                ) {
-                    Text("Cancel")
-                }
-            }
-        )
-    }
 }
 
 // Function to create TopAppBar and Scaffold

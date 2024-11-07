@@ -20,20 +20,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.Flashcard
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 
 
 @Composable
-fun NormalList(titles: List<Flashcard>, onItemClick: (String) -> Unit) {  // Add onItemClick callback
+fun NormalList(
+    titles: List<Lesson>,
+    onItemClick: (String) -> Unit,
+    viewModel: AppFlashcardViewModel
+) {  // Add onItemClick callback
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 16.dp)  // Fill the available space
     ) {
         items(titles) { title ->
-            NormalListItem(title = title.word, onItemClick = { onItemClick(title.word) })  // Pass click callback
+
+
+            NormalListItem(title = title.lessonName, onItemClick = {
+
+                onItemClick(title.lessonName)
+                viewModel.setLessonId( title.lessonId)
+
+            }
+
+            )  // Pass click callback
         }
     }
 }
@@ -61,7 +74,7 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 }
 
 @Composable
-fun DemoNormalList(navController: NavController, viewModel: FlashcardViewModel) {
+fun DemoNormalList(navController: NavController, viewModel: AppFlashcardViewModel) {
     val titles = listOf(
         "Title 1",
         "Title 2",
@@ -75,10 +88,18 @@ fun DemoNormalList(navController: NavController, viewModel: FlashcardViewModel) 
     // Use the ViewModel to observe state, call functions, etc.
     val isPractice by myViewModel.isPractice.collectAsState()
 
-    val flashcards by viewModel.allFlashcards.observeAsState(emptyList())
+    val folderId by viewModel.folderId.observeAsState()
 
-    NormalList(titles = flashcards, onItemClick = { title ->
+    // Observe lessons only when lessonId is non-null
+    val lessons = folderId?.let {
+        viewModel.getLessonsByFolderId(it).observeAsState(emptyList()).value
+    } ?: emptyList()
+
+    NormalList(titles = lessons, onItemClick = { title ->
         // Handle the item click, for example, show a toast or log the title
+
+
+
 
         if(isPractice){
 
@@ -95,5 +116,5 @@ fun DemoNormalList(navController: NavController, viewModel: FlashcardViewModel) 
             Log.d("TitleListDemo", "Clicked on: $title going to Edit")
 
         }
-    })
+    }, viewModel)
 }

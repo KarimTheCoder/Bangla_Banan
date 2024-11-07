@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 
+import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,12 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.Flashcard
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.FlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppFlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
 
 
 @Composable
-fun TypeInput(cardViewModel: FlashcardViewModel) {
+fun TypeInput(cardViewModel: AppFlashcardViewModel) {
 
 
 
@@ -76,11 +78,39 @@ fun TypeInput(cardViewModel: FlashcardViewModel) {
 
         InfoTextWithIcon(info)
 
+        val lessonId by cardViewModel.lessonId.observeAsState()
+
         // Pass the text value to the button's onClick function
-        AddButton(onClick = { viewModel.updateText(text)
-                                cardViewModel.insertFlashcard(Flashcard(word = text))
+        AddButton(onClick = {
+
+            viewModel.updateText(text)
+
+            val flashcard = lessonId?.let {
+
+                Flashcard(word = text, definition = text, lessonOwnerId = it)
+
+            }
+
+
+            if (flashcard != null) {
+                    cardViewModel.insertFlashcard(flashcard)
+            }else{
+
+                //todo write a log when flashcard is not inserted due to null
+            }
+
+
         })
-        DemoTrailList()
+
+
+        // Observe lessons only when lessonId is non-null
+        val lessons = lessonId?.let {
+            cardViewModel.getFlashcardsByLessonId(it).observeAsState(emptyList()).value
+        } ?: emptyList()
+
+        //val lessons by cardViewModel.allFlashcards.observeAsState(emptyList())
+
+        DemoTrailList(lessons)
     }
 }
 
