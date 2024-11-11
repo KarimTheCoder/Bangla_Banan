@@ -3,8 +3,8 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
-class FlashcardRepository @Inject constructor(
+
+class FlashcardRepository (
     private val flashcardDao: FlashcardDao
 ) {
 

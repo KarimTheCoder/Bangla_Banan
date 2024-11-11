@@ -9,8 +9,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
-@HiltViewModel
-class FlashcardViewModel @Inject constructor(
+
+class FlashcardViewModel(
     private val repository: FlashcardRepository)  : ViewModel() {
 
     fun insertFlashcard(flashcard: Flashcard) = viewModelScope.launch {

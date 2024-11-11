@@ -11,13 +11,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,9 +24,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.CorrectAnimation
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.WrongAnimation
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.flashcard.FlashcardViewModel
 
 @Composable
-fun TwoBoxesWithLines0(viewModel: PracticeViewModel) {
+fun TwoBoxesWithLines0(viewModel: PracticeViewModel, cardViewModel: FlashcardViewModel) {
+    val currentFlashcard by cardViewModel.currentFlashcard.observeAsState()
 
     val isVisible by viewModel.isVisible.collectAsState()
 
@@ -86,10 +84,10 @@ fun TwoBoxesWithLines0(viewModel: PracticeViewModel) {
         if(cardState == CardState.CORRECT){
 
 
-            SlideInWordCard(scale = scale, isVisible = isVisible)
+            SlideInWordCard(scale = scale, isVisible = isVisible, currentFlashcard)
         }else{
 
-            WordCard(scale = scale)
+            WordCard(scale = scale, currentFlashcard)
         }
 
 
@@ -97,7 +95,7 @@ fun TwoBoxesWithLines0(viewModel: PracticeViewModel) {
 }
 
 @Composable
-fun SlideInWordCard(scale: Float, isVisible: Boolean) {
+fun SlideInWordCard(scale: Float, isVisible: Boolean, currentFlashcard: Flashcard?, ) {
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInHorizontally(
@@ -105,13 +103,13 @@ fun SlideInWordCard(scale: Float, isVisible: Boolean) {
             animationSpec = tween(durationMillis = 300)
         )
     ) {
-        WordCard(scale)
+        WordCard(scale, currentFlashcard)
     }
 }
 
 
 @Composable
-private fun WordCard(scale: Float) {
+private fun WordCard(scale: Float, currentFlashcard: Flashcard?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -163,7 +161,7 @@ private fun WordCard(scale: Float) {
                     .graphicsLayer(scaleX = scale, scaleY = scale), // Scale the second box in place
                 contentAlignment = Alignment.Center
             ) {
-                RevealTextButton() // Your custom button
+                RevealTextButton(currentFlashcard) // Your custom button
             }
         }
     }

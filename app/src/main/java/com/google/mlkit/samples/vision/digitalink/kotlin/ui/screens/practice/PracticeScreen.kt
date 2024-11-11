@@ -1,20 +1,21 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.ViewModelProvider
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.MainActivity
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.PracticeTopBar
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.MyXmlButtonView
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppRepository
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.FlashcardViewModelFactory
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.MyAppDatabase
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.flashcard.FlashcardViewModel
 
@@ -47,24 +48,29 @@ fun PracticeScreen(navController: NavController, mainActivity: MainActivity) {
     Column {
 
         PracticeTopBar(navController)
-        TwoBoxesWithLines0(viewModel)
+        TwoBoxesWithLines0(viewModel, cardViewModel)
         HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, viewModel)
         MyXmlButtonView(strokeManager,viewModel)
 
 
-        Button(onClick = {
-                        viewModel.toggleCorrect()
-            }) {
 
-            Text(text = "Correct")
 
-        }
-        Button(onClick = {
-            viewModel.toggleWrong()
-        }) {
+        // Navigation buttons to switch flashcards
+        Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
 
-            Text(text = "Wrong")
+            Button(onClick = { viewModel.toggleCorrect()}) {
+                Text(text = "Correct")
+            }
+            Button(onClick = { viewModel.toggleWrong() }) {
+                Text(text = "Wrong")
+            }
 
+            Button(onClick = { cardViewModel.previousFlashcard() }, enabled = true) {
+                Text("<")
+            }
+            Button(onClick = { cardViewModel.nextFlashcard() }, enabled = true) {
+                Text(">")
+            }
         }
 
 
