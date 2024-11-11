@@ -29,7 +29,7 @@ fun AppNavigation(viewModel: AppDatabaseViewModel, mainActivity: MainActivity) {
     NavHost(navController = navController, startDestination = "home_screen")
     {
         composable("home_screen") {
-            LessonScreen(navController,viewModel)
+            LessonScreen(navController,viewModel,flashcardVM)
         }
         composable("edit_screen") {
             EditScreen(navController,viewModel)

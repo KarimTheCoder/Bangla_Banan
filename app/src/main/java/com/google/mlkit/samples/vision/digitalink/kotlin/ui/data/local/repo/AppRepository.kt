@@ -107,6 +107,12 @@ class AppRepository(private val appDao: AppDao) {
         return appDao.getDueFlashcards()
     }
 
+    suspend fun getDueFlashcardsByLesson(lessonId: Long): List<Flashcard> {
+        return appDao.getDueFlashcardsByLesson(lessonId)
+    }
+
+
+
     // Update a flashcard after review
     suspend fun updateFlashcardLeitner(flashcard: Flashcard, isCorrect: Boolean) {
         if (isCorrect) {

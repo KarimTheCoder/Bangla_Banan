@@ -16,9 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -26,12 +23,13 @@ import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 
 
 @Composable
 fun NormalList(
     titles: List<Lesson>,
-    onItemClick: (String) -> Unit,
+    onItemClick: (Lesson) -> Unit,
     viewModel: AppDatabaseViewModel
 ) {  // Add onItemClick callback
     LazyColumn(
@@ -45,7 +43,7 @@ fun NormalList(
             NormalListItem(title = title.lessonName, onItemClick = {
 
 
-                onItemClick(title.lessonName)
+                onItemClick(title)
                 viewModel.setLessonId( title.lessonId)
 
 
@@ -79,7 +77,11 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 }
 
 @Composable
-fun DemoNormalList(navController: NavController, viewModel: AppDatabaseViewModel) {
+fun DemoNormalList(
+    navController: NavController,
+    viewModel: AppDatabaseViewModel,
+    flashcardVM: FlashcardViewModel
+) {
 
     val myViewModel: MainViewModel = viewModel()
 
@@ -100,20 +102,19 @@ fun DemoNormalList(navController: NavController, viewModel: AppDatabaseViewModel
         // Handle the item click, for example, show a toast or log the title
 
 
+        flashcardVM.setLessonId(title.lessonId)
+        flashcardVM.loadFlashcards()
+
         if(isPractice){
 
             navController.navigate("practice_screen")
+            Log.d("TitleListDemo", "Clicked on: ${title.lessonName} going to practice")
 
-
-
-            Log.d("TitleListDemo", "Clicked on: $title going to practice")
 
         }else{
-
             navController.navigate("edit_screen")
-
-            Log.d("TitleListDemo", "Clicked on: $title going to Edit")
-
+            Log.d("TitleListDemo", "Clicked on: ${title.lessonName} going to Edit")
         }
+
     }, viewModel)
 }

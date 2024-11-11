@@ -15,6 +15,22 @@ import kotlinx.coroutines.launch
 class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
 
+    // MutableLiveData for lesson ID
+    private val _lessonId = MutableLiveData<Long>()
+    val lessonId: LiveData<Long> get() = _lessonId
+
+    // Function to set/update the lesson ID
+    fun setLessonId(newLessonId: Long) {
+        _lessonId.value = newLessonId
+    }
+
+    // Function to check if lessonId is initialized
+     fun isLessonIdInitialized(): Boolean {
+        return _lessonId.value != null
+    }
+
+
+
     private val _flashcards = MutableLiveData<List<Flashcard>>()
     val flashcards: LiveData<List<Flashcard>> = _flashcards
 
@@ -32,15 +48,26 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
     private val _flashcardSessionItems = MutableLiveData<List<FlashcardSessionItem>>()
     val flashcardSessionItems: LiveData<List<FlashcardSessionItem>> = _flashcardSessionItems
 
-    init {
-        loadFlashcards()
-    }
+//    init {
+//        loadFlashcards()
+//    }
 
-    private fun loadFlashcards() {
+     fun loadFlashcards() {
         viewModelScope.launch {
-            val loadedFlashcards = repository.getDueFlashcards()
-            _flashcards.value = loadedFlashcards
-            startNewSession()
+            
+            if(isLessonIdInitialized()){
+
+                //todo: null check
+
+                val loadedFlashcards = repository.getDueFlashcardsByLesson(lessonId.value!!)
+                _flashcards.value = loadedFlashcards
+                startNewSession()
+            }else{
+
+                // TODO: show lesson picked does not exists
+            }
+            
+
         }
     }
 

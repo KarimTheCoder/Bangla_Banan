@@ -22,7 +22,7 @@ fun PracticeScreen(navController: NavController, flashcardVM: FlashcardViewModel
 
 
 
-    var practiceVM = PracticeViewModel()
+    val practiceVM = PracticeViewModel()
     practiceVM.initializeDrawingRecognition()
     val strokeManager = practiceVM.strokeManager
     strokeManager.setClearCurrentInkAfterRecognition(true)
@@ -52,13 +52,21 @@ fun PracticeScreen(navController: NavController, flashcardVM: FlashcardViewModel
         // Navigation buttons to switch flashcards
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
 
-            Button(onClick = { practiceVM.toggleCorrect()}) {
-                Text(text = "Correct")
+            Button(onClick = {
+                practiceVM.toggleCorrect()
                 flashcardVM.markCurrentFlashcard(true)
             }
-            Button(onClick = { practiceVM.toggleWrong() }) {
-                Text(text = "Wrong")
+
+            ) {
+                Text(text = "Correct")
+
+            }
+            Button(onClick = {
+                practiceVM.toggleWrong()
                 flashcardVM.markCurrentFlashcard(false)
+            }) {
+                Text(text = "Wrong")
+
 
             }
 

@@ -54,7 +54,8 @@ fun MainScaffold(
     navController: NavController,
     drawerState: DrawerState,
     scope: CoroutineScope,
-    viewModel: AppDatabaseViewModel
+    viewModel: AppDatabaseViewModel,
+    flashcardVM: FlashcardViewModel
 ) {
     var isDialogOpen by remember { mutableStateOf(false) }
     var inputText by remember { mutableStateOf("") }
@@ -97,7 +98,7 @@ fun MainScaffold(
                     }
                 }
 
-                DemoNormalList(navController,viewModel)
+                DemoNormalList(navController,viewModel,flashcardVM)
             }
 
             // FAB with icon and text at the bottom-right

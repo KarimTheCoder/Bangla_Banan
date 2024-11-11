@@ -91,5 +91,8 @@ interface AppDao {
     @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime")
     suspend fun getDueFlashcards(currentTime: Long = System.currentTimeMillis()): List<Flashcard>
 
+    @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime AND lessonOwnerId = :lessonId")
+    suspend fun getDueFlashcardsByLesson(lessonId: Long, currentTime: Long = System.currentTimeMillis()): List<Flashcard>
+
 
 }

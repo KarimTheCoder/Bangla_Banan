@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -20,7 +21,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.Fla
 fun ToggleSegmentedButton(navController: NavController, flashcardVM: FlashcardViewModel) {
     // Boolean state for visibility
     // Boolean state for visibility
-    val sessionItems = remember { flashcardVM.getAllFlashcardSessionItems() }
+    val sessionItems by flashcardVM.flashcardSessionItems.observeAsState()
 
     val viewModel: SessionCompleteViewModel = viewModel()
     val isLessonVisible by viewModel.isLessonVisible.collectAsState()
