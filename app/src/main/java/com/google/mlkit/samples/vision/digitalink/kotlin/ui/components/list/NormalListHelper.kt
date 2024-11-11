@@ -16,12 +16,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
 
 
@@ -41,8 +44,10 @@ fun NormalList(
 
             NormalListItem(title = title.lessonName, onItemClick = {
 
+
                 onItemClick(title.lessonName)
                 viewModel.setLessonId( title.lessonId)
+
 
             }
 
@@ -75,13 +80,6 @@ fun NormalListItem(title: String, onItemClick: () -> Unit) {  // Add onItemClick
 
 @Composable
 fun DemoNormalList(navController: NavController, viewModel: AppDatabaseViewModel) {
-    val titles = listOf(
-        "Title 1",
-        "Title 2",
-        "Title 3",
-        "Title 4",
-        "Title 5"
-    )
 
     val myViewModel: MainViewModel = viewModel()
 
@@ -91,14 +89,15 @@ fun DemoNormalList(navController: NavController, viewModel: AppDatabaseViewModel
     val folderId by viewModel.folderId.observeAsState()
 
     // Observe lessons only when lessonId is non-null
-    val lessons = folderId?.let {
-        viewModel.getLessonsByFolderId(it).observeAsState(emptyList()).value
-    } ?: emptyList()
+
+
+    //val items by viewModel.allFolders.observeAsState(emptyList())
+
+
+    val lessons by viewModel.allLessons.observeAsState(emptyList())
 
     NormalList(titles = lessons, onItemClick = { title ->
         // Handle the item click, for example, show a toast or log the title
-
-
 
 
         if(isPractice){

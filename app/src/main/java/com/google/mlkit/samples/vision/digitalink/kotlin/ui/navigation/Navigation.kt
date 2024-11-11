@@ -6,14 +6,24 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.MainActivity
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.MyAppDatabase
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.CompleteScreen
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit.EditScreen
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.LessonScreen
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeScreen
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.PracticeScreen
 
 
 @Composable
 fun AppNavigation(viewModel: AppDatabaseViewModel, mainActivity: MainActivity) {
+
+    // Obtain an instance of FlashcardViewModel
+    val database = MyAppDatabase.getDatabase(mainActivity)
+    val repository = AppRepository(database.folderDao())
+    val flashcardVM =  FlashcardViewModel(repository)
+
+
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "home_screen")
@@ -27,11 +37,11 @@ fun AppNavigation(viewModel: AppDatabaseViewModel, mainActivity: MainActivity) {
         }
 
         composable("practice_screen") {
-            PracticeScreen( navController,mainActivity)
+            PracticeScreen( navController,flashcardVM)
 
         }
         composable("complete_screen") {
-            CompleteScreen(navController)
+            CompleteScreen(navController,viewModel,flashcardVM)
 
         }
     }

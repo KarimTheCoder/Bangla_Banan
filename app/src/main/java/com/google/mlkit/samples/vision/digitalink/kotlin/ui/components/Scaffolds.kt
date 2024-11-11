@@ -43,8 +43,9 @@ import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.complete.ToggleSegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Lesson
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.MainViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import kotlinx.coroutines.CoroutineScope
 
 // Function to create TopAppBar and Scaffold
@@ -136,7 +137,7 @@ fun MainScaffold(
                                 //todo needs more safety checks
                                 if( folderId != null){
                                     val lesson = Lesson(lessonName = inputText, folderOwnerId = folderId!!,)
-                                    viewModel.insertLesson(lesson)
+                                    viewModel.insertLesson(lesson, folderId!!)
                                 }
 
 
@@ -168,7 +169,12 @@ fun InputDialog(isDialogOpen: MutableState<Boolean>, inputText: MutableState<Str
 
 // Function to create TopAppBar and Scaffold
 @Composable
-fun SessionCompletedScaffold(navController: NavController, drawerState: DrawerState, scope: CoroutineScope) {
+fun SessionCompletedScaffold(
+    navController: NavController,
+    drawerState: DrawerState,
+    scope: CoroutineScope,
+    flashcardVM: FlashcardViewModel
+) {
     Scaffold(
         topBar = { SessionCompleteTopBar(navController, drawerState, scope) }
     ) { paddingValues ->
@@ -177,7 +183,7 @@ fun SessionCompletedScaffold(navController: NavController, drawerState: DrawerSt
         Column(modifier = Modifier.padding(paddingValues)) {
 
             SessionCompletedSegmentedButton()
-            ToggleSegmentedButton(navController)
+            ToggleSegmentedButton(navController,flashcardVM)
         }
 
     }

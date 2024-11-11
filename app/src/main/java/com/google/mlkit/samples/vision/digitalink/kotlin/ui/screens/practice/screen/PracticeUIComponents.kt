@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,7 +37,9 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
 
 
 @Composable
@@ -160,6 +164,50 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, v
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Text("Match")
+        }
+    }
+}
+
+
+@Composable
+fun FlashcardSessionItemView(
+    sessionItem: FlashcardSessionItem
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            // Display the flashcard word
+            Text(
+                text = "Word: ${sessionItem.flashcard.word}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Display if this flashcard is the current one
+            Text(
+                text = if (sessionItem.isCorrect == true) "Currently Reviewing" else "Not Current",
+                color = if (sessionItem.isCorrect == true) Color.Blue else Color.Gray,
+                style = MaterialTheme.typography.bodySmall
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Display correctness status
+            sessionItem.isCorrect?.let {
+                Text(
+                    text = "Correct: ${if (it) "Yes" else "No"}",
+                    color = if (it) Color.Green else Color.Red,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            } ?: Text(
+                text = "Not yet reviewed",
+                color = Color.Gray,
+                style = MaterialTheme.typography.bodySmall
+            )
         }
     }
 }

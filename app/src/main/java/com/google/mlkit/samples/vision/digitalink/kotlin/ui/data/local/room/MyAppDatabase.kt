@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room
 
 import android.content.Context
 import androidx.room.Database

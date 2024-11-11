@@ -1,4 +1,4 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppDao {
@@ -54,7 +53,7 @@ interface AppDao {
 
     // Query all Lessons in a specific Folder
     @Query("SELECT * FROM lesson_table WHERE folderOwnerId = :folderId")
-    suspend fun getLessonsByFolderId(folderId: Long): List<Lesson>
+    suspend fun getLessonsByFolderId(folderId: Long?): List<Lesson>
 
     // Delete a Lesson
     @Delete

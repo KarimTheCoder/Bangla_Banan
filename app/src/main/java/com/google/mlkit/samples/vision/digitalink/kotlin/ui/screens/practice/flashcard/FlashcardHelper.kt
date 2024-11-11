@@ -1,4 +1,6 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard
+
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 
 fun updateFlashcardLeitner(flashcard: Flashcard, isCorrect: Boolean) {
     if (isCorrect) {

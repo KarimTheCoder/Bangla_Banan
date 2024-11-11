@@ -4,9 +4,37 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import kotlinx.coroutines.launch
 
 class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
+    // MutableLiveData for folder ID
+    private val _folderId = MutableLiveData<Long>()
+    val folderId: LiveData<Long> = _folderId
+    // Function to check if folderId is initialized
+    fun isFolderIdInitialized(): Boolean {
+        return _folderId.value != null
+    }
+
+    // MutableLiveData for lesson ID
+    private val _lessonId = MutableLiveData<Long>()
+    val lessonId: LiveData<Long> = _lessonId
+
+    // Function to update the folder ID
+    fun setFolderId(newId: Long) {
+        _folderId.value = newId
+        fetchAllLessons(newId)
+    }
+
+    // Function to update the lesson ID
+    fun setLessonId(newId: Long) {
+        _lessonId.value = newId
+    }
+
+
 
     // --- Folder Operations ---
 
@@ -54,17 +82,17 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     private val _allLessons = MutableLiveData<List<Lesson>>()
     val allLessons: LiveData<List<Lesson>> get() = _allLessons
 
-    fun insertLesson(lesson: Lesson) {
+    fun insertLesson(lesson: Lesson,folderId: Long) {
         viewModelScope.launch {
             repository.insertLesson(lesson)
-            fetchAllLessons() // Refresh the list
+            fetchAllLessons(folderId) // Refresh the list
         }
     }
 
-    fun updateLesson(lesson: Lesson) {
+    fun updateLesson(lesson: Lesson,folderId: Long) {
         viewModelScope.launch {
             repository.updateLesson(lesson)
-            fetchAllLessons() // Refresh the list
+            fetchAllLessons(folderId) // Refresh the list
         }
     }
 
@@ -76,24 +104,31 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
         return lessonData
     }
 
-    fun getLessonsByFolderId(folderId: Long): LiveData<List<Lesson>> {
-        val lessonsData = MutableLiveData<List<Lesson>>()
+
+
+
+    fun getLessonsByFolderId(folderId: Long?){
+
         viewModelScope.launch {
-            lessonsData.value = repository.getLessonsByFolderId(folderId)
+            _allLessons.value = repository.getLessonsByFolderId(folderId)
         }
-        return lessonsData
+        //return lessonsData
+
     }
 
-    fun deleteLesson(lesson: Lesson) {
+    fun deleteLesson(lesson: Lesson,folderId: Long) {
         viewModelScope.launch {
             repository.deleteLesson(lesson)
-            fetchAllLessons() // Refresh the list
+            fetchAllLessons(folderId) // Refresh the list
         }
     }
 
-     fun fetchAllLessons() {
+     fun fetchAllLessons(folderId: Long) {
+
         viewModelScope.launch {
-            _allLessons.value = repository.getAllLessons()
+
+            //todo null check
+                _allLessons.value = repository.getLessonsByFolderId(folderId)
         }
     }
 
@@ -147,23 +182,7 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     }
 
 
-    // MutableLiveData for folder ID
-    private val _folderId = MutableLiveData<Long>()
-    val folderId: LiveData<Long> = _folderId
 
-    // MutableLiveData for lesson ID
-    private val _lessonId = MutableLiveData<Long>()
-    val lessonId: LiveData<Long> = _lessonId
-
-    // Function to update the folder ID
-    fun setFolderId(newId: Long) {
-        _folderId.value = newId
-    }
-
-    // Function to update the lesson ID
-    fun setLessonId(newId: Long) {
-        _lessonId.value = newId
-    }
 
 
 }

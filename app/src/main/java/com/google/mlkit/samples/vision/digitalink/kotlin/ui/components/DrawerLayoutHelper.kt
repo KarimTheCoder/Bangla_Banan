@@ -38,7 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Folder
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -69,6 +69,15 @@ fun DrawerContent(
     val items by viewModel.allFolders.observeAsState(emptyList())
     val drawerItems = getDrawerItems(items)
 
+    if(!viewModel.isFolderIdInitialized() && drawerItems.isNotEmpty()){
+        viewModel.setFolderId(drawerItems[0].folderId)
+    }else{
+
+        Text(text = "No drawer folder")
+    }
+
+    
+
     ModalDrawerSheet(modifier = Modifier.width(300.dp)) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -85,8 +94,9 @@ fun DrawerContent(
                         label = { DrawerItemLabel(item) },
                         selected = selectedItem == item,
                         icon = item.icon,
-                        onClick = { onItemSelect(item)
+                        onClick = {
 
+                            onItemSelect(item)
                             viewModel.setFolderId(item.folderId)
 
                         }
@@ -123,6 +133,7 @@ fun DrawerContent(
 
                         val folder = Folder(folderName = folderName.value)
                         viewModel.insertFolder(folder)
+                        viewModel.fetchAllFolders()
                         folderName.value = "" // Clear input after saving
                     }
                 )

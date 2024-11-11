@@ -8,11 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.DrawingView
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class PracticeViewModel: ViewModel() {

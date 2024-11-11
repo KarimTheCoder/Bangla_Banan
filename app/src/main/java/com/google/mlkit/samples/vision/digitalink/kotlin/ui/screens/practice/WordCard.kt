@@ -24,8 +24,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.CorrectAnimation
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.WrongAnimation
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.flashcard.FlashcardViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.AudioIconButton
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.RevealTextButton
 
 @Composable
 fun TwoBoxesWithLines0(viewModel: PracticeViewModel, cardViewModel: FlashcardViewModel) {

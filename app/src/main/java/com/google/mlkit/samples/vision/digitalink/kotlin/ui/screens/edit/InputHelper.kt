@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 
 
 @Composable

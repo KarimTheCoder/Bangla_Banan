@@ -1,4 +1,9 @@
-package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
+package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo
+
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.AppDao
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 
 class AppRepository(private val appDao: AppDao) {
 
@@ -54,7 +59,7 @@ class AppRepository(private val appDao: AppDao) {
     }
 
     // Get all lessons for a specific folder
-    suspend fun getLessonsByFolderId(folderId: Long): List<Lesson> {
+    suspend fun getLessonsByFolderId(folderId: Long?): List<Lesson> {
         return appDao.getLessonsByFolderId(folderId)
     }
 
