@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.DrawingView
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
@@ -41,8 +42,8 @@ class PracticeViewModel: ViewModel() {
         strokeManager.reset()
     }
 
-    fun recognizeClick() {
-        strokeManager.recognize()
+    fun recognizeClick(): Task<String?> {
+        return strokeManager.recognize()
     }
 
     // Mutable background color state
@@ -66,6 +67,7 @@ class PracticeViewModel: ViewModel() {
                 delay(1200) // Wait for 300 milliseconds
                 _backgroundColor.value = Color.LightGray
                 toggleCorrect()
+                clearScreen()
             }
         }
     }
@@ -79,8 +81,19 @@ class PracticeViewModel: ViewModel() {
                 delay(1200) // Wait for 300 milliseconds
                 _backgroundColor.value = Color.LightGray
                 toggleWrong()
+
+                clearScreen()
+
             }
         }
+    }
+
+    private fun clearScreen(){
+
+        strokeManager.reset()
+        drawingViewRef.value?.clear()
+        updateText("")
+
     }
 
 

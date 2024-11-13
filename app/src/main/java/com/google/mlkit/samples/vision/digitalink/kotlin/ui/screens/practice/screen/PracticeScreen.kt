@@ -33,7 +33,14 @@ fun PracticeScreen(navController: NavController, flashcardVM: FlashcardViewModel
 
     val listener = object : StrokeManager.StatusChangedListener {
         override fun onStatusChanged() {
-            strokeManager.text?.let { practiceVM.updateText(it) }
+
+
+
+            strokeManager.text?.let {
+                flashcardVM.updateWrittenText(it)
+                practiceVM.updateText(it)
+
+            }
             Log.i("regtag", "status changed: ${strokeManager.text}")
         }
     }
@@ -43,32 +50,12 @@ fun PracticeScreen(navController: NavController, flashcardVM: FlashcardViewModel
 
         PracticeTopBar(navController)
         TwoBoxesWithLines0(practiceVM, flashcardVM)
-        HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, practiceVM)
+        HorizontalLayoutWithTextButtonAndMatchButton(strokeManager, practiceVM,flashcardVM)
         MyXmlButtonView(strokeManager,practiceVM)
-
-
 
 
         // Navigation buttons to switch flashcards
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-
-            Button(onClick = {
-                practiceVM.toggleCorrect()
-                flashcardVM.markCurrentFlashcard(true)
-            }
-
-            ) {
-                Text(text = "Correct")
-
-            }
-            Button(onClick = {
-                practiceVM.toggleWrong()
-                flashcardVM.markCurrentFlashcard(false)
-            }) {
-                Text(text = "Wrong")
-
-
-            }
 
             Button(onClick = { flashcardVM.previousFlashcard() }, enabled = true) {
                 Text("<")
@@ -80,15 +67,10 @@ fun PracticeScreen(navController: NavController, flashcardVM: FlashcardViewModel
                 navController.navigate("complete_screen")
                              }, enabled = true) {
                 Text("End")
-
             }
         }
 
 
     }
-
-
-
-
 
 }

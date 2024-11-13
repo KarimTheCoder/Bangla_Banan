@@ -86,10 +86,10 @@ fun TwoBoxesWithLines0(viewModel: PracticeViewModel, cardViewModel: FlashcardVie
         if(cardState == CardState.CORRECT){
 
 
-            SlideInWordCard(scale = scale, isVisible = isVisible, currentFlashcard)
+            SlideInWordCard(scale = scale, isVisible = isVisible, currentFlashcard,cardViewModel)
         }else{
 
-            WordCard(scale = scale, currentFlashcard)
+            WordCard(scale = scale, currentFlashcard,cardViewModel)
         }
 
 
@@ -97,7 +97,11 @@ fun TwoBoxesWithLines0(viewModel: PracticeViewModel, cardViewModel: FlashcardVie
 }
 
 @Composable
-fun SlideInWordCard(scale: Float, isVisible: Boolean, currentFlashcard: Flashcard?, ) {
+fun SlideInWordCard(
+    scale: Float,
+    isVisible: Boolean,
+    currentFlashcard: Flashcard?,
+    cardViewModel: FlashcardViewModel, ) {
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInHorizontally(
@@ -105,13 +109,13 @@ fun SlideInWordCard(scale: Float, isVisible: Boolean, currentFlashcard: Flashcar
             animationSpec = tween(durationMillis = 300)
         )
     ) {
-        WordCard(scale, currentFlashcard)
+        WordCard(scale, currentFlashcard, cardViewModel)
     }
 }
 
 
 @Composable
-private fun WordCard(scale: Float, currentFlashcard: Flashcard?) {
+private fun WordCard(scale: Float, currentFlashcard: Flashcard?, cardViewModel: FlashcardViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,7 +141,7 @@ private fun WordCard(scale: Float, currentFlashcard: Flashcard?) {
             ) {
 
 
-                AudioIconButton()
+                AudioIconButton(cardViewModel)
             }
 
 

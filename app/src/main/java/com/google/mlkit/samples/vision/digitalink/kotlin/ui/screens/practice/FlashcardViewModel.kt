@@ -112,4 +112,41 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
     fun getAllFlashcardSessionItems(): List<FlashcardSessionItem>? {
         return flashcardSession?.flashcards
     }
+
+    // MutableLiveData to hold the string value
+    private val _writtenText = MutableLiveData("Initial Value")
+    val writtenText: LiveData<String> = _writtenText
+
+    // Function to update the text
+    fun updateWrittenText(newText: String) {
+        _writtenText.value = newText
+    }
+
+    fun isWrittenWordCorrect(recognizedText: String): Boolean{
+
+        val currentWord = currentFlashcard.value?.word
+
+
+        if(currentWord?.let { areBanglaStringsEqual(it, recognizedText) } == true){
+
+            markCurrentFlashcard(true)
+            return true
+
+        }else{
+
+            markCurrentFlashcard(false)
+            return false
+        }
+    }
+
+
+    //Matching
+    fun areBanglaStringsEqual(str1: String, str2: String): Boolean {
+        return str1 == str2
+    }
+
+
+
+
+
 }

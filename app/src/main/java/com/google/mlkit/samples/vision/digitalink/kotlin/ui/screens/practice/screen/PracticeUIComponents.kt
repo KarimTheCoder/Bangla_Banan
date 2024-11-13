@@ -1,5 +1,9 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen
 
+import android.os.Handler
+import android.os.Looper
+import android.speech.tts.TextToSpeech
+import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
@@ -21,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -30,6 +35,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -38,12 +47,19 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
+import kotlinx.coroutines.delay
+import java.util.Locale
 
 
 @Composable
-fun AudioIconButton() {
+fun AudioIconButton(cardViewModel: FlashcardViewModel) {
+
+    //todo: null check
+    val currentWord = cardViewModel.currentFlashcard.value?.word
+
     // Controls whether to show the animation or the icon
     var showAnimation by remember { mutableStateOf(false) }
 
@@ -62,9 +78,29 @@ fun AudioIconButton() {
         }
     }
 
+    val context = LocalContext.current
+    var tts: TextToSpeech? by remember { mutableStateOf(null) }
+
+    // Initialize TextToSpeech
+    DisposableEffect(context) {
+        tts = TextToSpeech(context) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                tts?.language = Locale("bn")
+            }
+        }
+
+        onDispose {
+            tts?.shutdown()
+        }
+    }
+
+
+
     // IconButton with logic to toggle between icon and animation
     IconButton(
         onClick = {
+
+            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
             showAnimation = true // Start animation when button is clicked
         },
         modifier = Modifier.fillMaxSize()
@@ -79,7 +115,7 @@ fun AudioIconButton() {
         } else {
             // Display icon
             Icon(
-                imageVector = Icons.Default.Call,
+                imageVector = ImageVector.vectorResource(id = R.drawable.outline_hearing_24),
                 contentDescription = "Favorite icon",
                 tint = Color.Black,
                 modifier = Modifier.size(24.dp)
@@ -107,7 +143,8 @@ fun RevealTextButton(currentFlashcard: Flashcard?) {
         // IconButton
         IconButton(onClick = { isTextVisible = !isTextVisible }) {
             Icon(
-                imageVector = Icons.Default.Lock, // Use any icon here
+                imageVector = ImageVector.vectorResource(id = R.drawable.outline_lock_24),
+                tint = Color.Black,
                 contentDescription = "Reveal text"
             )
         }
@@ -123,7 +160,11 @@ fun RevealTextButton(currentFlashcard: Flashcard?) {
     }
 }
 @Composable
-fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, viewModel: PracticeViewModel) {
+fun HorizontalLayoutWithTextButtonAndMatchButton(
+    strokeManager: StrokeManager,
+    viewModel: PracticeViewModel,
+    flashcardVM: FlashcardViewModel
+) {
     val drawingViewRef = viewModel.drawingViewRef
 
     val text by viewModel.text.observeAsState("")
@@ -160,7 +201,46 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(strokeManager: StrokeManager, v
 
         // Match Button at the end
         Button(
-            onClick = { viewModel.recognizeClick() },
+            onClick = {
+
+
+                viewModel.recognizeClick().addOnSuccessListener{ recognizedText->
+
+                    if (recognizedText != null) {
+
+                        Log.i("Recogize stuff","text: $recognizedText")
+
+                        if (flashcardVM.isWrittenWordCorrect(recognizedText)) {
+
+                            viewModel.toggleCorrect()
+
+
+
+
+                        } else {
+                            viewModel.toggleWrong()
+
+
+                        }
+
+
+                        //Todo: Use more graceful way to remove previous text from canvas
+//                        Handler(Looper.getMainLooper()).postDelayed({
+//                            viewModel.strokeManager.reset()
+//                            viewModel.drawingViewRef.value?.clear()
+//                            viewModel.updateText("")
+//
+//                        }, 1000) // 2000 milliseconds (2 seconds)
+
+
+                    }
+
+
+                }
+                
+
+
+            },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Text("Match")

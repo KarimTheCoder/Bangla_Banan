@@ -15,8 +15,6 @@ fun LessonScreen(
     flashcardVM: FlashcardViewModel
 ){
 
-
-
     MyDrawerLayout (viewModel){ drawerState, scope ->
         MainScaffold(navController, drawerState, scope,viewModel,flashcardVM)
     }
