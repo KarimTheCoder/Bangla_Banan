@@ -141,7 +141,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
 
     //Matching
-    fun areBanglaStringsEqual(str1: String, str2: String): Boolean {
+    private fun areBanglaStringsEqual(str1: String, str2: String): Boolean {
         return str1 == str2
     }
 
