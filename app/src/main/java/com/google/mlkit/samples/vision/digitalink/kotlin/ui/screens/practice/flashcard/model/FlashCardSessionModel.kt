@@ -1,11 +1,13 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model
 
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.updateFlashcardLeitner
 
 data class FlashcardSessionItem(
     val flashcard: Flashcard, // The flashcard being reviewed
     var isCorrect: Boolean? = null, // Track if the answer was correct (null if not yet answered)
-    var timestamp: Long? = null // Timestamp for when the flashcard was reviewed
+    var timestamp: Long? = null, // Timestamp for when the flashcard was reviewed
+    var isBoxChangedThisSession: Boolean = false
 )
 
 data class FlashcardSession(
@@ -13,7 +15,10 @@ data class FlashcardSession(
     val flashcards: List<FlashcardSessionItem>, // List of session items
     var currentIndex: Int = 0, // Tracks the current flashcard in the session
     var startTime: Long = System.currentTimeMillis(), // Start time of session
-    var endTime: Long? = null // End time, set when session completes
+    var endTime: Long? = null,
+    val updateAction: (Flashcard) -> Unit
+    // End time, set when session completes
+
 ) {
     // Helper to get the current flashcard item
     fun currentFlashcardItem(): FlashcardSessionItem? =
@@ -39,10 +44,23 @@ data class FlashcardSession(
 
     // Mark the current flashcard item with a result
     fun markCurrentFlashcard(isCorrect: Boolean) {
-        currentFlashcardItem()?.let {
-            it.isCorrect = isCorrect
-            it.timestamp = System.currentTimeMillis()
+        //todo: null check
+        if(currentFlashcardItem()?.isBoxChangedThisSession == false){
+            currentFlashcardItem()?.let {
+                it.isCorrect = isCorrect
+                it.timestamp = System.currentTimeMillis()
+
+                updateFlashcardLeitner(it.flashcard, isCorrect, updateAction)
+            }
+
+            currentFlashcardItem()?.isBoxChangedThisSession = true
+
+
+
         }
+
+
+
     }
 
     // End the session

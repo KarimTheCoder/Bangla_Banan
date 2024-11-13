@@ -9,6 +9,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppR
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSession
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.updateFlashcardLeitner
 import kotlinx.coroutines.launch
 
 
@@ -71,10 +72,20 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         }
     }
 
+
+
+
     private fun startNewSession() {
+
+        val updateFlashcard = fun(flashcard: Flashcard){
+            viewModelScope.launch {
+                repository.insertFlashcard(flashcard)
+            }
+        }
+
         _flashcards.value?.let { flashcardsList ->
             val sessionItems = flashcardsList.map { FlashcardSessionItem(it) }
-            flashcardSession = FlashcardSession(flashcards = sessionItems)
+            flashcardSession = FlashcardSession(flashcards = sessionItems, updateAction = updateFlashcard)
             _currentFlashcardIndex.value = 0
             _flashcardSessionItems.value = sessionItems // Populate session items LiveData
         }
@@ -100,7 +111,9 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
     fun markCurrentFlashcard(isCorrect: Boolean) {
         flashcardSession?.markCurrentFlashcard(isCorrect)
+
         nextFlashcard()
+
     }
 
     fun endSession(): Pair<Int, Int>? {

@@ -4,6 +4,9 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 // Folder Entity
 @Entity(tableName = "folder_table")
@@ -48,4 +51,20 @@ data class Flashcard(
     val isMistake: Boolean = false,
     var boxLevel: Int = 1, // Starts in the first box by default
     var dueDate: Long = System.currentTimeMillis() // Next review date, based on box level
-)
+
+
+
+)  {
+
+
+
+    fun getDueDateString(): String {
+
+        // Define the date format you want (e.g., "yyyy-MM-dd HH:mm:ss")
+        val dateFormat = SimpleDateFormat("dd-MM-yy", Locale.getDefault())
+        // Convert Long to Date and format it to a string
+        val dateString: String = dateFormat.format(Date(dueDate))
+        return dateString;
+    }
+
+}

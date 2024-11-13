@@ -29,7 +29,9 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flas
 fun ListWithTrail(titles: List<Flashcard>, onDeleteClick: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(titles) { title ->
-            ListItemWithTrail(title = title.word, onTrailClick = onDeleteClick)
+
+
+            ListItemWithTrail(title = title.word +" box: ${title.boxLevel} due: ${title.getDueDateString()}", onTrailClick = onDeleteClick)
         }
     }
 }
@@ -70,7 +72,6 @@ fun ListItemWithTrail(title: String, onTrailClick: (String) -> Unit) {
 }
 @Composable
 fun DemoTrailList(lessons: List<Flashcard>) {
-    val titles = listOf("Item 1", "Item 2", "Item 3")
 
 
     ListWithTrail(titles = lessons, onDeleteClick = { item ->

@@ -86,8 +86,6 @@ interface AppDao {
     @Delete
     suspend fun deleteFlashcard(flashcard: Flashcard)
 
-
-
     @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime")
     suspend fun getDueFlashcards(currentTime: Long = System.currentTimeMillis()): List<Flashcard>
 
