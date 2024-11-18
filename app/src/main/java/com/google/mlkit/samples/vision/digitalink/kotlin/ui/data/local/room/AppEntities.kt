@@ -50,13 +50,16 @@ data class Flashcard(
     val lessonOwnerId: Long,
     val isMistake: Boolean = false,
     var boxLevel: Int = 1, // Starts in the first box by default
-    var dueDate: Long = System.currentTimeMillis() // Next review date, based on box level
-
+    var dueDate: Long = System.currentTimeMillis(), // Next review date, based on box level
+    var familiarityCount: Int = 0
 
 
 )  {
 
 
+    fun isFamiliarized():Boolean{
+        return familiarityCount >= 5
+    }
 
     fun getDueDateString(): String {
 
@@ -66,5 +69,7 @@ data class Flashcard(
         val dateString: String = dateFormat.format(Date(dueDate))
         return dateString;
     }
+
+
 
 }

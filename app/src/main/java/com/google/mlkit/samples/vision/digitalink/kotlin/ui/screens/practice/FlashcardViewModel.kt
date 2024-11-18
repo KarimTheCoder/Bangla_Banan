@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -85,6 +86,8 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
         _flashcards.value?.let { flashcardsList ->
             val sessionItems = flashcardsList.map { FlashcardSessionItem(it) }
+
+
             flashcardSession = FlashcardSession(flashcards = sessionItems, updateAction = updateFlashcard)
             _currentFlashcardIndex.value = 0
             _flashcardSessionItems.value = sessionItems // Populate session items LiveData
@@ -110,15 +113,31 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
     }
 
     fun markCurrentFlashcard(isCorrect: Boolean) {
-        flashcardSession?.markCurrentFlashcard(isCorrect)
 
-        nextFlashcard()
+        currentFlashcardIndex.value?.let {
+            flashcardSessionItems.value?.get(it)?.let { Log.i("Sessionxxx","review count ${it.flashcard.word}"+
+                it.reviewCount.toString()
+            ) }
+        }
+
+        if(flashcardSession?.isSessionComplete() == false){
+
+            flashcardSession?.markCurrentFlashcard(isCorrect)
+
+            nextFlashcard()
+        }else{
+
+
+            Log.i("Sessionxxx","Session completed")
+        }
+
+
 
     }
 
-    fun endSession(): Pair<Int, Int>? {
+    fun endSession() {
         flashcardSession?.endSession()
-        return flashcardSession?.getSummary()
+
     }
 
     // Function to get all FlashcardSessionItems

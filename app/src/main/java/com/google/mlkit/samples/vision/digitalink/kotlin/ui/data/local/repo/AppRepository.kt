@@ -111,8 +111,7 @@ class AppRepository(private val appDao: AppDao) {
         return appDao.getDueFlashcardsByLesson(lessonId)
     }
 
-
-
+    //todo: use this instead of FlashcardHelper
     // Update a flashcard after review
     suspend fun updateFlashcardLeitner(flashcard: Flashcard, isCorrect: Boolean) {
         if (isCorrect) {
@@ -136,4 +135,54 @@ class AppRepository(private val appDao: AppDao) {
         // Update flashcard in database
         appDao.updateFlashcard(flashcard)
     }
+
+
+
+    // Function to get the count of familiarized flashcards
+    suspend fun getFamiliarizedFlashcardCount(): Int {
+        return appDao.getFamiliarizedFlashcardCount()
+    }
+
+    // Function to get the count of not familiarized flashcards
+    suspend fun getNotFamiliarizedFlashcardCount(): Int {
+        return appDao.getNotFamiliarizedFlashcardCount()
+    }
+
+    // Function to get a specific number of familiarized flashcards
+    suspend fun getFamiliarizedFlashcards(limit: Int): List<Flashcard> {
+        return appDao.getFamiliarizedFlashcards(limit)
+    }
+
+    // Function to get a specific number of not familiarized flashcards
+    suspend fun getNotFamiliarizedFlashcards(limit: Int): List<Flashcard> {
+        return appDao.getNotFamiliarizedFlashcards(limit)
+    }
+
+
+    // Function to get a balanced set of familiarized and not familiarized flashcards
+    suspend fun getBalancedFlashcards(totalCount: Int): List<Flashcard> {
+        // Determine the split count for each kind
+        val halfCount = totalCount / 2
+
+        // Fetch familiarized and not familiarized flashcards with the half count limit
+        val familiarizedFlashcards = appDao.getFamiliarizedFlashcards(halfCount)
+        val notFamiliarizedFlashcards = appDao.getNotFamiliarizedFlashcards(halfCount)
+
+        // Calculate remaining count needed if either list is smaller than halfCount
+        val remainingFamiliarizedNeeded = halfCount - familiarizedFlashcards.size
+        val remainingNotFamiliarizedNeeded = halfCount - notFamiliarizedFlashcards.size
+
+        // Fetch additional flashcards if one list is short
+        val additionalFamiliarized = if (remainingNotFamiliarizedNeeded > 0) {
+            appDao.getFamiliarizedFlashcards(remainingNotFamiliarizedNeeded)
+        } else emptyList()
+
+        val additionalNotFamiliarized = if (remainingFamiliarizedNeeded > 0) {
+            appDao.getNotFamiliarizedFlashcards(remainingFamiliarizedNeeded)
+        } else emptyList()
+
+        // Combine all flashcards into a final list
+        return familiarizedFlashcards + notFamiliarizedFlashcards + additionalFamiliarized + additionalNotFamiliarized
+    }
+
 }
