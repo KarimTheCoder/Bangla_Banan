@@ -2,7 +2,6 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.fl
 
 import android.util.Log
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.updateFlashcardLeitner
 
 data class FlashcardSessionItem(
     val flashcard: Flashcard, // The flashcard being reviewed
@@ -10,7 +9,7 @@ data class FlashcardSessionItem(
     var timestamp: Long? = null, // Timestamp for when the flashcard was reviewed
     var isBoxChangedThisSession: Boolean = false, // Prevent multiple box changes per session
     var reviewCount: Int = 0, // Track the number of reviews for this flashcard
-    var maxReviewCount: Int = if (flashcard.isFamiliarized()) 1 else 3 // Default max reviews based on familiarity
+    var maxReviewCount: Int = if (flashcard.isFamiliarized()) 1 else flashcard.getUnfamiliarMaxReviewCount() // Default max reviews based on familiarity
 )
 
 data class FlashcardSession(
@@ -19,8 +18,10 @@ data class FlashcardSession(
     var currentIndex: Int = 0, // Tracks the current flashcard in the session
     var startTime: Long = System.currentTimeMillis(), // Start time of session
     var endTime: Long? = null,
-    val updateAction: (Flashcard) -> Unit // Action to update flashcards
+    val updateAction: (Flashcard) -> Unit, // Action to update flashcards
+    val updateFlashcardLeitner: (Flashcard,Boolean) -> Unit,
 ) {
+
 
     private val TAG = "FlashcardSession"
 
@@ -30,14 +31,22 @@ data class FlashcardSession(
 
     // Mark the current flashcard item as reviewed
     fun markCurrentFlashcard(isCorrect: Boolean) {
+
+        Log.i(TAG, "Flashcard sizeg ${flashcards.size}")
         currentFlashcardItem()?.let { item ->
             if (item.reviewCount < item.maxReviewCount) {
                 item.isCorrect = isCorrect
                 item.timestamp = System.currentTimeMillis()
                 item.reviewCount++ // Increment the review count
 
+                Log.i(TAG, "MaxReview count ${item.maxReviewCount}")
                 Log.i(TAG, "Marked flashcard '${item.flashcard.word}' as ${if (isCorrect) "correct" else "incorrect"}")
                 Log.i(TAG, "Review count for '${item.flashcard.word}' is now ${item.reviewCount}")
+
+
+
+
+
 
                 // Adjust max review count based on familiarity and correctness
                 if (!isCorrect) {
@@ -47,12 +56,27 @@ data class FlashcardSession(
                             item.maxReviewCount++
                             Log.i(TAG, "Increased max review count for familiarized flashcard '${item.flashcard.word}' to ${item.maxReviewCount}")
                         }
+
                     } else {
                         // For not familiarized flashcards, maxReviewCount can increase up to 5
                         if (item.maxReviewCount < 5) {
                             item.maxReviewCount++
                             Log.i(TAG, "Increased max review count for not familiarized flashcard '${item.flashcard.word}' to ${item.maxReviewCount}")
                         }
+                    }
+                }else{
+                //Todo: if correct update the flashcard database
+
+                    if (item.flashcard.isFamiliarized()) {
+
+                        updateFlashcardLeitner(item.flashcard,isCorrect)
+
+                    } else {
+                        item.flashcard.familiarityCount++
+                        updateAction(item.flashcard)
+
+
+
                     }
                 }
 

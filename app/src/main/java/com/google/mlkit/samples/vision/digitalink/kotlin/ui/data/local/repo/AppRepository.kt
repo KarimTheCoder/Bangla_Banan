@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo
 
+import android.util.Log
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.AppDao
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
@@ -148,40 +149,70 @@ class AppRepository(private val appDao: AppDao) {
         return appDao.getNotFamiliarizedFlashcardCount()
     }
 
-    // Function to get a specific number of familiarized flashcards
-    suspend fun getFamiliarizedFlashcards(limit: Int): List<Flashcard> {
-        return appDao.getFamiliarizedFlashcards(limit)
-    }
+//    // Function to get a specific number of familiarized flashcards
+//    suspend fun getFamiliarizedFlashcards(limit: Int): List<Flashcard> {
+//        return appDao.getFamiliarizedFlashcards(limit)
+//    }
+//
+//    // Function to get a specific number of not familiarized flashcards
+//    suspend fun getNotFamiliarizedFlashcards(limit: Int): List<Flashcard> {
+//        return appDao.getNotFamiliarizedFlashcards(limit)
+//    }
 
-    // Function to get a specific number of not familiarized flashcards
-    suspend fun getNotFamiliarizedFlashcards(limit: Int): List<Flashcard> {
-        return appDao.getNotFamiliarizedFlashcards(limit)
-    }
 
+    suspend fun getBalancedFlashcards(totalCount: Int, lessonId: Long): List<Flashcard> {
+        Log.d("FlashcardSession", "Fetching balanced flashcards for totalCount: $totalCount, lessonId: $lessonId")
 
-    // Function to get a balanced set of familiarized and not familiarized flashcards
-    suspend fun getBalancedFlashcards(totalCount: Int): List<Flashcard> {
         // Determine the split count for each kind
         val halfCount = totalCount / 2
+        Log.d("FlashcardSession", "Half count for each category: $halfCount")
 
         // Fetch familiarized and not familiarized flashcards with the half count limit
-        val familiarizedFlashcards = appDao.getFamiliarizedFlashcards(halfCount)
-        val notFamiliarizedFlashcards = appDao.getNotFamiliarizedFlashcards(halfCount)
+        val familiarizedFlashcards = appDao.getFamiliarizedFlashcards(halfCount, lessonId)
+        Log.d("FlashcardSession", "Fetched familiarized flashcards: ${familiarizedFlashcards.size}")
+
+        val notFamiliarizedFlashcards = appDao.getNotFamiliarizedFlashcards(halfCount, lessonId)
+        Log.d("FlashcardSession", "Fetched not familiarized flashcards: ${notFamiliarizedFlashcards.size}")
 
         // Calculate remaining count needed if either list is smaller than halfCount
         val remainingFamiliarizedNeeded = halfCount - familiarizedFlashcards.size
         val remainingNotFamiliarizedNeeded = halfCount - notFamiliarizedFlashcards.size
 
-        // Fetch additional flashcards if one list is short
-        val additionalFamiliarized = if (remainingNotFamiliarizedNeeded > 0) {
-            appDao.getFamiliarizedFlashcards(remainingNotFamiliarizedNeeded)
-        } else emptyList()
+        Log.d(
+            "FlashcardSession",
+            "Remaining familiarized needed: $remainingFamiliarizedNeeded, Remaining not familiarized needed: $remainingNotFamiliarizedNeeded"
+        )
 
-        val additionalNotFamiliarized = if (remainingFamiliarizedNeeded > 0) {
-            appDao.getNotFamiliarizedFlashcards(remainingFamiliarizedNeeded)
-        } else emptyList()
+        // If both are zero, no additional flashcards are needed
+        if (remainingFamiliarizedNeeded <= 0 && remainingNotFamiliarizedNeeded <= 0) {
+            Log.d("FlashcardSession", "No additional flashcards needed; combining fetched flashcards.")
+            return familiarizedFlashcards + notFamiliarizedFlashcards
+        }
+
+        // Initialize additional flashcard lists
+        val additionalFamiliarized = mutableListOf<Flashcard>()
+        val additionalNotFamiliarized = mutableListOf<Flashcard>()
+
+        // Add more familiarized flashcards if not familiarized is short
+        if (remainingNotFamiliarizedNeeded > 0) {
+            Log.d("FlashcardSession", "Adding additional familiarized flashcards.")
+            additionalFamiliarized.addAll(
+                appDao.getFamiliarizedFlashcards(remainingNotFamiliarizedNeeded, lessonId)
+                    .filterNot { familiarizedFlashcards.contains(it) }
+            )
+        }
+
+        // Add more not familiarized flashcards if familiarized is short
+        if (remainingFamiliarizedNeeded > 0) {
+            Log.d("FlashcardSession", "Adding additional not familiarized flashcards.")
+            additionalNotFamiliarized.addAll(
+                appDao.getNotFamiliarizedFlashcards(remainingFamiliarizedNeeded, lessonId)
+                    .filterNot { notFamiliarizedFlashcards.contains(it) }
+            )
+        }
 
         // Combine all flashcards into a final list
+        Log.d("FlashcardSession", "Finalizing flashcard list.")
         return familiarizedFlashcards + notFamiliarizedFlashcards + additionalFamiliarized + additionalNotFamiliarized
     }
 

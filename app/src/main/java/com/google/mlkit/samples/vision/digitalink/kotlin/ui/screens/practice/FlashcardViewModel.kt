@@ -61,7 +61,9 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
                 //todo: null check
 
-                val loadedFlashcards = repository.getDueFlashcardsByLesson(lessonId.value!!)
+                val loadedFlashcards = repository.getBalancedFlashcards(10,lessonId.value!!)
+
+                Log.i("FlashcardSession","${loadedFlashcards.size} flashcards added")
                 _flashcards.value = loadedFlashcards
                 startNewSession()
             }else{
@@ -73,26 +75,18 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         }
     }
 
-
-
-
     private fun startNewSession() {
-
-        val updateFlashcard = fun(flashcard: Flashcard){
-            viewModelScope.launch {
-                repository.insertFlashcard(flashcard)
-            }
-        }
-
         _flashcards.value?.let { flashcardsList ->
             val sessionItems = flashcardsList.map { FlashcardSessionItem(it) }
 
+            // Pass the existing `updateFlashcard` function reference
+            flashcardSession = FlashcardSession(flashcards = sessionItems, updateAction = ::updateFlashcard, updateFlashcardLeitner =  ::updateFlashcardLeitner)
 
-            flashcardSession = FlashcardSession(flashcards = sessionItems, updateAction = updateFlashcard)
             _currentFlashcardIndex.value = 0
             _flashcardSessionItems.value = sessionItems // Populate session items LiveData
         }
     }
+
 
     private fun updateCurrentFlashcard() {
         flashcardSession?.let { session ->
@@ -114,26 +108,16 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
     fun markCurrentFlashcard(isCorrect: Boolean) {
 
-        currentFlashcardIndex.value?.let {
-            flashcardSessionItems.value?.get(it)?.let { Log.i("Sessionxxx","review count ${it.flashcard.word}"+
-                it.reviewCount.toString()
-            ) }
-        }
-
         if(flashcardSession?.isSessionComplete() == false){
-
             flashcardSession?.markCurrentFlashcard(isCorrect)
-
             nextFlashcard()
+
         }else{
-
-
-            Log.i("Sessionxxx","Session completed")
+            Log.i("FlashcardSession","Session completed")
         }
-
-
-
     }
+
+
 
     fun endSession() {
         flashcardSession?.endSession()
@@ -171,13 +155,24 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         }
     }
 
-
     //Matching
     private fun areBanglaStringsEqual(str1: String, str2: String): Boolean {
         return str1 == str2
     }
 
 
+
+    fun updateFlashcard(flashcard: Flashcard) {
+        viewModelScope.launch {
+            repository.updateFlashcard(flashcard)
+        }
+    }
+
+    fun updateFlashcardLeitner(flashcard: Flashcard, isCorrect: Boolean) {
+        viewModelScope.launch {
+            repository.updateFlashcardLeitner(flashcard,isCorrect)
+        }
+    }
 
 
 

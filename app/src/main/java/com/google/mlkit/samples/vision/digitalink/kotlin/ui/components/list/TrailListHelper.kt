@@ -30,8 +30,7 @@ fun ListWithTrail(titles: List<Flashcard>, onDeleteClick: (String) -> Unit) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(titles) { title ->
 
-
-            ListItemWithTrail(title = title.word +" box: ${title.boxLevel} due: ${title.getDueDateString()}", onTrailClick = onDeleteClick)
+            ListItemWithTrail(title = title.word +" box: ${title.boxLevel} due: ${title.getDueDateString()+ " Familiarity: ${title.familiarityCount}"}", onTrailClick = onDeleteClick)
         }
     }
 }

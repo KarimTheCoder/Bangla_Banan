@@ -61,6 +61,10 @@ data class Flashcard(
         return familiarityCount >= 5
     }
 
+    fun getUnfamiliarMaxReviewCount(): Int {
+        return maxOf(0, 5 - familiarityCount) // Ensures the result is not negative
+    }
+
     fun getDueDateString(): String {
 
         // Define the date format you want (e.g., "yyyy-MM-dd HH:mm:ss")
