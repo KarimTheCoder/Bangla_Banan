@@ -1,9 +1,12 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen
 
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
@@ -55,10 +58,10 @@ import java.util.Locale
 
 
 @Composable
-fun AudioIconButton(cardViewModel: FlashcardViewModel) {
+fun AudioIconButton(currentFlashcard: Flashcard?) {
 
     //todo: null check
-    val currentWord = cardViewModel.currentFlashcard.value?.word
+    val currentWord = currentFlashcard?.word
 
     // Controls whether to show the animation or the icon
     var showAnimation by remember { mutableStateOf(false) }
@@ -81,15 +84,44 @@ fun AudioIconButton(cardViewModel: FlashcardViewModel) {
     val context = LocalContext.current
     var tts: TextToSpeech? by remember { mutableStateOf(null) }
 
-    // Initialize TextToSpeech
     DisposableEffect(context) {
-        tts = TextToSpeech(context) { status ->
+        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status == TextToSpeech.SUCCESS) {
-                tts?.language = Locale("bn")
+                // Set engine to Google TTS
+                val googleTtsEngine = "com.google.android.tts"
+
+                try {
+                    // Force using Google TTS engine
+                    tts?.setEngineByPackageName(googleTtsEngine)
+                    Log.d("TTS", "Using Google TTS engine.")
+                } catch (e: Exception) {
+                    Log.e(
+                        "TTS",
+                        "Google TTS engine is not available. Falling back to default engine."
+                    )
+                    Toast.makeText(
+                        context,
+                        "Google TTS engine not available. Using default engine.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                // Check if Bengali language is available
+                val langStatus = tts?.isLanguageAvailable(Locale("bn"))
+                if (langStatus == TextToSpeech.LANG_AVAILABLE) {
+                    tts?.language = Locale("bn")
+                    Log.d("TTS", "Bengali language is available.")
+                } else {
+                    Log.e("TTS", "Bengali language is not available, falling back to English.")
+                    tts?.language = Locale("en") // Fallback to English if Bengali is unavailable
+                }
+            } else {
+                Log.e("TTS", "TextToSpeech initialization failed.")
             }
-        }
+        })
 
         onDispose {
+            // Shutdown TTS when composable is disposed
             tts?.shutdown()
         }
     }
@@ -99,6 +131,9 @@ fun AudioIconButton(cardViewModel: FlashcardViewModel) {
     // IconButton with logic to toggle between icon and animation
     IconButton(
         onClick = {
+
+         
+
 
             tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
             showAnimation = true // Start animation when button is clicked

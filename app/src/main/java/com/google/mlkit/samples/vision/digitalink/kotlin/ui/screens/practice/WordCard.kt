@@ -141,7 +141,7 @@ private fun WordCard(scale: Float, currentFlashcard: Flashcard?, cardViewModel: 
             ) {
 
 
-                AudioIconButton(cardViewModel)
+                AudioIconButton(currentFlashcard)
             }
 
 

@@ -91,9 +91,9 @@ fun InsertSampleData(viewModel: AppDatabaseViewModel) {
         listOf(
             Flashcard(word = "কলা", definition = "Basic unit of life.", lessonOwnerId = lesson.lessonId),
             Flashcard(word = "আম", definition = "Smallest unit of matter.", lessonOwnerId = lesson.lessonId),
-//            Flashcard(word = "কমলা", definition = "Interaction that changes motion.", lessonOwnerId = lesson.lessonId),
-//            Flashcard(word = "লিচু", definition = "Capacity to do work.", lessonOwnerId = lesson.lessonId),
-//            Flashcard(word = "তরমুজ", definition = "Combination of atoms.", lessonOwnerId = lesson.lessonId)
+            Flashcard(word = "কমলা", definition = "Interaction that changes motion.", lessonOwnerId = lesson.lessonId),
+            Flashcard(word = "লিচু", definition = "Capacity to do work.", lessonOwnerId = lesson.lessonId),
+            Flashcard(word = "তরমুজ", definition = "Combination of atoms.", lessonOwnerId = lesson.lessonId)
         )
     }
 
