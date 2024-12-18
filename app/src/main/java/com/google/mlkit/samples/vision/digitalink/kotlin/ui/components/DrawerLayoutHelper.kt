@@ -36,13 +36,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.InsertSampleData
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.MainActivity
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import kotlinx.coroutines.CoroutineScope
+import kotlin.coroutines.coroutineContext
 
 
 @Composable
@@ -114,7 +117,7 @@ fun DrawerContent(
             val folderName = remember { mutableStateOf("") }
 
 
-            InsertSampleData(viewModel = viewModel)
+            InsertSampleData(viewModel = viewModel, LocalContext.current)
 
             Button(
                 onClick = { isDialogOpen.value = true },

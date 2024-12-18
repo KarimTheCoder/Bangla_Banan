@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,12 +16,19 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDataba
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.FlashcardViewModelFactory
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.loadFolderFromJsonData
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.loadJsonData
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.loadLessonsFromJsonData
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.printJsonFlashcards
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.printJsonFolder
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.printJsonLessons
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.MyAppDatabase
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.navigation.AppNavigation
 import com.google.mlkit.samples.vision.digitalink.ui.theme.MLKitDigitalInkRecognitionDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlin.random.Random
 
 @AndroidEntryPoint
@@ -52,8 +60,11 @@ class MainActivity : ComponentActivity() {
                     AppNavigation(flashcardViewModel,this)
 
 
+                    printJsonFolder(this)
+                    printJsonLessons(this)
+                    printJsonFlashcards(this)
 
-                    //InsertSampleData(viewModel = flashcardViewModel)
+                    //InsertSampleData(viewModel = flashcardViewModel,this)
 
                 }
             }
@@ -69,33 +80,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun InsertSampleData(viewModel: AppDatabaseViewModel) {
+fun InsertSampleData(viewModel: AppDatabaseViewModel, context: Context) {
 
     // Define sample folder list
-    val folderList = listOf(
-        Folder(folderName = "বাংলাদেশ", folderId = Random.nextLong()),
-        Folder(folderName = "Mathematics", folderId = Random.nextLong())
-    )
+    val folderList = loadFolderFromJsonData(context)
 
     // Define sample lesson list, with each lesson linked to its folder by folderId
-    val lessonList = folderList.flatMap { folder ->
-        listOf(
-            Lesson(lessonName = "ফল", folderOwnerId = folder.folderId, lessonId = Random.nextLong()),
-            Lesson(lessonName = "ফুল", folderOwnerId = folder.folderId, lessonId = Random.nextLong()),
-            Lesson(lessonName = "সবজি", folderOwnerId = folder.folderId, lessonId = Random.nextLong())
-        )
-    }
-
+    val lessonList = loadLessonsFromJsonData(context)
     // Define sample flashcard list, with each flashcard linked to its lesson by lessonId
-    val flashcardList = lessonList.flatMap { lesson ->
-        listOf(
-            Flashcard(word = "কলা", definition = "Basic unit of life.", lessonOwnerId = lesson.lessonId),
-            Flashcard(word = "আম", definition = "Smallest unit of matter.", lessonOwnerId = lesson.lessonId),
-            Flashcard(word = "কমলা", definition = "Interaction that changes motion.", lessonOwnerId = lesson.lessonId),
-            Flashcard(word = "লিচু", definition = "Capacity to do work.", lessonOwnerId = lesson.lessonId),
-            Flashcard(word = "তরমুজ", definition = "Combination of atoms.", lessonOwnerId = lesson.lessonId)
-        )
-    }
+    val flashcardList = loadJsonData(context)
 
     // Button to insert data
     Button(onClick = {
@@ -117,3 +110,43 @@ fun InsertSampleData(viewModel: AppDatabaseViewModel) {
         Text("Insert Sample Data")
     }
 }
+
+//@Composable
+//fun InsertJsonData(viewModel: AppDatabaseViewModel, context: Context) {
+//    // Load JSON data
+//    val jsonData = loadJsonData(context)
+//
+//    // Button to insert data
+//    Button(onClick = {
+//        // Group data into Folders, Lessons, and Flashcards
+//        val folderMap = mutableMapOf<String, Long>() // folderName -> folderId
+//        val lessonMap = mutableMapOf<Pair<String, String>, Long>() // (folderName, lessonName) -> lessonId
+//
+//        jsonData.forEach { data ->
+//
+//            val folderName = data.folder.takeIf { it.isNotBlank() } ?: "Unknown"
+//            val lessonName = data.Lesson
+//
+//            // Insert folder if not already inserted
+//            if (folderName !in folderMap) {
+//                val folderId = Random.nextLong()
+//                folderMap[folderName] = folderId
+//                viewModel.insertFolder(Folder(folderId = folderId, folderName = folderName))
+//            }
+//
+//            // Insert lesson if not already inserted
+//            val folderId = folderMap[folderName]!!
+//            if (Pair(folderName, lessonName) !in lessonMap) {
+//                val lessonId = Random.nextLong()
+//                lessonMap[Pair(folderName, lessonName)] = lessonId
+//                viewModel.insertLesson(Lesson(lessonId = lessonId, lessonName = lessonName, folderOwnerId = folderId), folderId)
+//            }
+//
+//            // Insert flashcard
+//            val lessonId = lessonMap[Pair(folderName, lessonName)]!!
+//            viewModel.insertFlashcard(Flashcard(word = data.word, definition = data.definition, lessonOwnerId = lessonId))
+//        }
+//    }) {
+//        Text("Insert JSON Data")
+//    }
+//}

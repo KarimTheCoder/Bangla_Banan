@@ -14,7 +14,11 @@ data class Folder(
     @PrimaryKey(autoGenerate = true)
     val folderId: Long = 0,
     val folderName: String
-)
+){
+    override fun toString(): String {
+        return "Folder(folderId=$folderId, folderName='$folderName')"
+    }
+}
 
 // Lesson Entity
 @Entity(
@@ -31,7 +35,12 @@ data class Lesson(
     @PrimaryKey(autoGenerate = true) val lessonId: Long = 0,
     val lessonName: String,
     val folderOwnerId: Long // Foreign key referring to the Folder table
-)
+){
+
+    override fun toString(): String {
+        return "Lesson(lessonId=$lessonId, lessonName='$lessonName', folderOwnerId=$folderOwnerId)"
+    }
+}
 
 @Entity(
     tableName = "flashcard_table",
@@ -74,6 +83,10 @@ data class Flashcard(
         return dateString;
     }
 
-
+    override fun toString(): String {
+        return "Flashcard(flashcardId=$flashcardId, word='$word', definition='$definition', " +
+                "lessonOwnerId=$lessonOwnerId, isMistake=$isMistake, boxLevel=$boxLevel, " +
+                "dueDate=$dueDate, familiarityCount=$familiarityCount)"
+    }
 
 }
