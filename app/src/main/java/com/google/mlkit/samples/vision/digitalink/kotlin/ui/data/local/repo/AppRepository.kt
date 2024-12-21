@@ -216,4 +216,46 @@ class AppRepository(private val appDao: AppDao) {
         return familiarizedFlashcards + notFamiliarizedFlashcards + additionalFamiliarized + additionalNotFamiliarized
     }
 
+
+    suspend fun calculateLessonProgress(
+        lessonId: Long,
+    ): Float {
+        val flashcards = appDao.getFlashcardsByLessonId(lessonId)
+        if (flashcards.isEmpty()) return 0f // No flashcards, progress is 0%
+
+        // Manually sum the progress for each flashcard
+        var totalProgress = 0f
+        for (flashcard in flashcards) {
+            val familiarityProgress = flashcard.familiarityCount / 5f
+            val boxLevelProgress = flashcard.boxLevel / 5f
+            totalProgress += (familiarityProgress + boxLevelProgress) / 2 // Weighted average
+        }
+
+        // Average progress across all flashcards
+        return (totalProgress / flashcards.size) * 100
+    }
+
+    suspend fun calculateFamiliarityCountProgress(
+        lessonId: Long
+    ): Float {
+        val flashcards = appDao.getFlashcardsByLessonId(lessonId)
+        if (flashcards.isEmpty()) return 0f // No flashcards, progress is 0%
+
+        val totalFamiliarityProgress = flashcards.sumBy { it.familiarityCount } // Sum of all familiarityCounts
+        val maxFamiliarityProgress = flashcards.size * 5 // Each flashcard can contribute up to 5
+
+        return totalFamiliarityProgress.toFloat() / maxFamiliarityProgress // Value between 0f and 1f
+    }
+
+    suspend fun calculateBoxLevelProgress(
+        lessonId: Long
+    ): Float {
+        val flashcards = appDao.getFlashcardsByLessonId(lessonId)
+        if (flashcards.isEmpty()) return 0f // No flashcards, progress is 0%
+
+        val totalBoxLevelProgress = flashcards.sumBy { it.boxLevel } // Sum of all boxLevels
+        val maxBoxLevelProgress = flashcards.size * 5 // Each flashcard can contribute up to 5
+
+        return totalBoxLevelProgress.toFloat() / maxBoxLevelProgress // Value between 0f and 1f
+    }
 }

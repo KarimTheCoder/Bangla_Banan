@@ -3,6 +3,7 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
@@ -11,6 +12,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Less
 import kotlinx.coroutines.launch
 
 class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
+
     // MutableLiveData for folder ID
     private val _folderId = MutableLiveData<Long>()
     val folderId: LiveData<Long> = _folderId
@@ -183,6 +185,19 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
 
 
 
+    fun getLessonProgress(lessonId: Long): LiveData<Float> = liveData {
+        val progress = repository.calculateLessonProgress(lessonId)
+        emit(progress)
+    }
+
+    fun getLessonFamiliarityProgress(lessonId: Long): LiveData<Float> = liveData {
+        val progress = repository.calculateFamiliarityCountProgress(lessonId)
+        emit(progress)
+    }
+    fun getLessonSpacedRepetitionProgress(lessonId: Long): LiveData<Float> = liveData {
+        val progress = repository.calculateBoxLevelProgress(lessonId)
+        emit(progress)
+    }
 
 
 }
