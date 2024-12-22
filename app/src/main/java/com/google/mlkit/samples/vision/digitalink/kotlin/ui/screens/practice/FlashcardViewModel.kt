@@ -10,7 +10,8 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppR
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSession
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.updateFlashcardLeitner
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 
@@ -175,5 +176,38 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
     }
 
 
+    // StateFlow to hold familiarity progress
+    private val _familiarityProgress = MutableStateFlow<List<Boolean>>(emptyList())
+    val familiarityProgress: StateFlow<List<Boolean>> = _familiarityProgress
+
+    // Function to calculate familiarity progress and update the StateFlow
+    fun fetchFamiliarityProgress(flashcardId: Long) {
+        viewModelScope.launch {
+            try {
+                val progress = repository.calculateFamiliarityProgress(flashcardId)
+                _familiarityProgress.value = progress
+            } catch (e: Exception) {
+                // Handle exceptions, e.g., log the error or notify the user
+                _familiarityProgress.value = emptyList() // Fallback
+            }
+        }
+    }
+
+    // StateFlow to hold familiarity progress
+    private val _spacedRepetitionProgress = MutableStateFlow<List<Boolean>>(emptyList())
+    val spacedRepetitionProgress: StateFlow<List<Boolean>> = _spacedRepetitionProgress
+
+    // Function to calculate familiarity progress and update the StateFlow
+    fun fetchSpacedRepetitionProgress(flashcardId: Long) {
+        viewModelScope.launch {
+            try {
+                val progress = repository.calculateSpacedRepetitionProgress(flashcardId)
+                _spacedRepetitionProgress.value = progress
+            } catch (e: Exception) {
+                // Handle exceptions, e.g., log the error or notify the user
+                _spacedRepetitionProgress.value = emptyList() // Fallback
+            }
+        }
+    }
 
 }

@@ -258,4 +258,33 @@ class AppRepository(private val appDao: AppDao) {
 
         return totalBoxLevelProgress.toFloat() / maxBoxLevelProgress // Value between 0f and 1f
     }
+
+    suspend fun calculateFamiliarityProgress(
+        flashcardId: Long
+    ): List<Boolean> {
+        val flashcard = appDao.getFlashcardById(flashcardId)
+        return if (flashcard != null) {
+            getFamiliarityCountList(flashcard.familiarityCount)
+        } else {
+            emptyList() // Handle the case where the flashcard does not exist
+        }
+    }
+
+    suspend fun calculateSpacedRepetitionProgress(
+        flashcardId: Long
+    ): List<Boolean> {
+        val flashcard = appDao.getFlashcardById(flashcardId)
+        return if (flashcard != null) {
+            getFamiliarityCountList(flashcard.boxLevel)
+        } else {
+            emptyList() // Handle the case where the flashcard does not exist
+        }
+    }
+
+    private fun getFamiliarityCountList(count: Int, maxCount: Int = 5): List<Boolean> {
+        val validCount = count.coerceIn(0, maxCount)
+        return List(maxCount) { it < validCount }
+    }
+
+
 }
