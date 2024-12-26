@@ -14,6 +14,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 
 
 class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
@@ -100,6 +101,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         flashcardSession?.nextFlashcard()?.let {
             _currentFlashcardIndex.value = flashcardSession?.currentIndex
         }
+        updateSessionProgress()
         viewModelScope.launch {
             delay(1400) // Delay for 1200ms
             triggerIconClick()
@@ -110,6 +112,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         flashcardSession?.previousFlashcard()?.let {
             _currentFlashcardIndex.value = flashcardSession?.currentIndex
         }
+        updateSessionProgress()
         viewModelScope.launch {
             delay(1400) // Delay for 1200ms
             triggerIconClick()
@@ -120,6 +123,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
         if(flashcardSession?.isSessionComplete() == false){
             flashcardSession?.markCurrentFlashcard(isCorrect)
+            updateSessionProgress()
             nextFlashcard()
 
         }else{
@@ -165,11 +169,14 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         }
     }
 
-    //Matching
     private fun areBanglaStringsEqual(str1: String, str2: String): Boolean {
-        return str1 == str2
-    }
+        // Normalize the strings to remove any Unicode discrepancies
+        val normalizedStr1 = Normalizer.normalize(str1.trim(), Normalizer.Form.NFC)
+        val normalizedStr2 = Normalizer.normalize(str2.trim(), Normalizer.Form.NFC)
 
+        // Compare the normalized strings
+        return normalizedStr1 == normalizedStr2
+    }
 
 
     fun updateFlashcard(flashcard: Flashcard) {
@@ -232,6 +239,31 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         fun resetIconClick() {
             _onIconClick.value = false
         }
+
+
+
+    // Progress
+    // MutableStateFlow to track session progress
+    private val _sessionProgress = MutableStateFlow(0f)
+    val sessionProgress: StateFlow<Float> = _sessionProgress
+
+    private fun calculateSessionProgress(): Float {
+        val totalMaxReviews = flashcardSession?.flashcards?.sumOf { it.maxReviewCount } ?: 0
+        if (totalMaxReviews == 0) return 0f // Avoid division by zero
+
+        val totalReviewsDone = flashcardSession?.flashcards?.sumOf { it.reviewCount } ?: 0
+        return (totalReviewsDone.toFloat() / totalMaxReviews)
+    }
+
+    fun updateSessionProgress() {
+        val progress = calculateSessionProgress()
+        _sessionProgress.value = progress
+
+        // Trigger endFunction if progress reaches 100%
+        if (progress >= 100f) {
+            endSession()
+        }
+    }
 
 
 }

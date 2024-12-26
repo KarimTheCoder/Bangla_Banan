@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeUIViewModel
 
 
 @Composable
-fun MyXmlButtonView(strokeManager: StrokeManager, viewModel: PracticeViewModel) {
+fun MyXmlButtonView(strokeManager: StrokeManager, viewModel: PracticeUIViewModel) {
     
     val drawingViewRef = viewModel.drawingViewRef
 

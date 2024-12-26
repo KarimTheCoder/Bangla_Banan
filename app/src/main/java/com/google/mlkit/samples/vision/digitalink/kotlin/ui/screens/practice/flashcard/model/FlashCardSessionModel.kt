@@ -3,7 +3,7 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.fl
 import android.util.Log
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 
-data class FlashcardSessionItem(
+    data class FlashcardSessionItem(
     val flashcard: Flashcard, // The flashcard being reviewed
     var isCorrect: Boolean? = null, // Track if the answer was correct (null if not yet answered)
     var timestamp: Long? = null, // Timestamp for when the flashcard was reviewed

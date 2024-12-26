@@ -104,27 +104,3 @@ fun EditTopBar(navController: NavController) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PracticeTopBar(navController: NavController) {
-    TopAppBar(
-        title = {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Practice")
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = { navController.popBackStack()}) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
-            }
-        },
-        actions = {
-            IconButton(onClick = { navController.navigate("complete_screen")}) {
-                Icon(Icons.AutoMirrored.Filled.ArrowForward, contentDescription = "More options")
-            }
-        }
-    )
-}

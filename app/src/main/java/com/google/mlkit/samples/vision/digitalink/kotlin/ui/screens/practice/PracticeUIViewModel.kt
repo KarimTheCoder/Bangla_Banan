@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class PracticeViewModel: ViewModel() {
+class PracticeUIViewModel: ViewModel() {
 
     val BANGLA_LANG_CODE: String = "bn"
     val strokeManager = StrokeManager()
