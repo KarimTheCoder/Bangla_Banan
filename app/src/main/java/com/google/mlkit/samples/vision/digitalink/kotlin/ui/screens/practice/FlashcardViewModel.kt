@@ -10,6 +10,7 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppR
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSession
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -99,11 +100,19 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         flashcardSession?.nextFlashcard()?.let {
             _currentFlashcardIndex.value = flashcardSession?.currentIndex
         }
+        viewModelScope.launch {
+            delay(1400) // Delay for 1200ms
+            triggerIconClick()
+        }
     }
 
     fun previousFlashcard() {
         flashcardSession?.previousFlashcard()?.let {
             _currentFlashcardIndex.value = flashcardSession?.currentIndex
+        }
+        viewModelScope.launch {
+            delay(1400) // Delay for 1200ms
+            triggerIconClick()
         }
     }
 
@@ -209,5 +218,20 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
             }
         }
     }
+
+
+
+
+        private val _onIconClick = MutableStateFlow(false)
+        val onIconClick: StateFlow<Boolean> = _onIconClick
+
+        fun triggerIconClick() {
+            _onIconClick.value = true
+        }
+
+        fun resetIconClick() {
+            _onIconClick.value = false
+        }
+
 
 }

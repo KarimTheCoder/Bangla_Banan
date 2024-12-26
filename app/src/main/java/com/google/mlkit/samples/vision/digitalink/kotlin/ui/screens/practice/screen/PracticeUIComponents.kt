@@ -1,9 +1,5 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen
 
-import android.content.Intent
-import android.os.Handler
-import android.os.Looper
-import android.provider.Settings
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
@@ -17,9 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Call
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -30,6 +23,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -53,13 +46,14 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flas
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
-import kotlinx.coroutines.delay
 import java.util.Locale
 
 
 @Composable
-fun AudioIconButton(currentFlashcard: Flashcard?) {
+fun AudioIconButton(currentFlashcard: Flashcard?, cardViewModel: FlashcardViewModel) {
 
+
+    val onIconClick by cardViewModel.onIconClick.collectAsState()
     //todo: null check
     val currentWord = currentFlashcard?.word
 
@@ -73,13 +67,7 @@ fun AudioIconButton(currentFlashcard: Flashcard?) {
         isPlaying = showAnimation
     )
 
-    // Trigger the delay within a LaunchedEffect when showAnimation changes to true
-    LaunchedEffect(showAnimation) {
-        if (showAnimation) {
-            kotlinx.coroutines.delay(2000) // Show animation for 2 seconds
-            showAnimation = false
-        }
-    }
+
 
     val context = LocalContext.current
     var tts: TextToSpeech? by remember { mutableStateOf(null) }
@@ -126,17 +114,29 @@ fun AudioIconButton(currentFlashcard: Flashcard?) {
         }
     }
 
+    // Trigger the delay within a LaunchedEffect when showAnimation changes to true
+    LaunchedEffect(onIconClick) {
+        if (onIconClick) {
 
+            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
+
+
+            showAnimation = true
+            kotlinx.coroutines.delay(2000) // Wait for the animation duration
+            showAnimation = false
+            cardViewModel.resetIconClick()
+        }
+    }
 
     // IconButton with logic to toggle between icon and animation
     IconButton(
         onClick = {
 
-         
+            cardViewModel.triggerIconClick()
 
 
-            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
-            showAnimation = true // Start animation when button is clicked
+//            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
+//            showAnimation = true // Start animation when button is clicked
         },
         modifier = Modifier.fillMaxSize()
     ) {
@@ -243,7 +243,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
 
                     if (recognizedText != null) {
 
-                        Log.i("Recogize stuff","text: $recognizedText")
+                        Log.i("Recognize stuff","text: $recognizedText")
 
                         if (flashcardVM.isWrittenWordCorrect(recognizedText)) {
 

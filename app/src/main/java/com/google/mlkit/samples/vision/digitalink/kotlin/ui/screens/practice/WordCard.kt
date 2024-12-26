@@ -52,24 +52,6 @@ fun TwoBoxesWithLines0(viewModel: PracticeViewModel, cardViewModel: FlashcardVie
         contentAlignment = Alignment.Center
     ) {
 
-
-
-
-//        when (cardState) {
-//            CardState.SHOW -> SlideInWordCard(scale,isVisible)
-//
-//            CardState.CORRECT -> {
-//                CorrectAnimation()
-//                SlideInWordCard(scale, isVisible)
-//            }
-//
-//            CardState.WRONG -> {
-//                WrongAnimation()
-//                WordCard(scale)
-//            }
-//        }
-
-
         if(!isVisible){
 
             if(cardState == CardState.CORRECT){
@@ -141,7 +123,7 @@ private fun WordCard(scale: Float, currentFlashcard: Flashcard?, cardViewModel: 
             ) {
 
 
-                AudioIconButton(currentFlashcard)
+                AudioIconButton(currentFlashcard,cardViewModel )
             }
 
 

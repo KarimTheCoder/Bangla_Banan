@@ -9,13 +9,15 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Fold
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 
 
+    const val filename = "bancom.json"
+
 fun loadJsonData(context: Context): List<Flashcard> {
-    val json = context.assets.open("common_bangla_words.json").bufferedReader().use { it.readText() }
+    val json = context.assets.open(filename).bufferedReader().use { it.readText() }
     val listType = object : TypeToken<List<Flashcard>>() {}.type
     return Gson().fromJson(json, listType)
 }
 fun loadLessonsFromJsonData(context: Context): List<Lesson> {
-    val json = context.assets.open("common_bangla_words.json").bufferedReader().use { it.readText() }
+    val json = context.assets.open(filename).bufferedReader().use { it.readText() }
     val listType = object : TypeToken<List<Lesson>>() {}.type
     val lessons: List<Lesson> = Gson().fromJson(json, listType)
 
@@ -24,7 +26,7 @@ fun loadLessonsFromJsonData(context: Context): List<Lesson> {
 }
 
 fun loadFolderFromJsonData(context: Context): List<Folder> {
-    val json = context.assets.open("common_bangla_words.json").bufferedReader().use { it.readText() }
+    val json = context.assets.open(filename).bufferedReader().use { it.readText() }
     val listType = object : TypeToken<List<Folder>>() {}.type
     val folder: List<Folder> = Gson().fromJson(json, listType)
 
