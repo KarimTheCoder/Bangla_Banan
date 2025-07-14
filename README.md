@@ -1,3 +1,4 @@
+https://raw.githubusercontent.com/KarimTheCoder/Bangla_Banan/main/screenshots/github_screenshot_1.png
 # Bangla Spelling Practice App
 
 **An interactive Android application to help users master Bangla spelling, built with Jetpack Compose and leveraging modern learning techniques.**
