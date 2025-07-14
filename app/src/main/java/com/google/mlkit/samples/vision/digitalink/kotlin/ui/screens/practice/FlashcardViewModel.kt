@@ -128,6 +128,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
 
         }else{
             Log.i("FlashcardSession","Session completed")
+            endSession()
         }
     }
 
@@ -144,18 +145,36 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
     }
 
     // MutableLiveData to hold the string value
-    private val _writtenText = MutableLiveData("Initial Value")
+    private val _statusText = MutableLiveData("Initial Value")
+    val statusText: LiveData<String> = _statusText
+
+    // Function to update the text
+    fun updateStatusText(newText: String) {
+        _statusText.value = newText
+    }
+
+    private val _writtenText = MutableLiveData("No value")
     val writtenText: LiveData<String> = _writtenText
 
     // Function to update the text
     fun updateWrittenText(newText: String) {
         _writtenText.value = newText
     }
+    private val _currentWord = MutableLiveData("No value")
+    val currentWord: LiveData<String> = _currentWord
+
+    // Function to update the text
+    fun updateCurrentWord(newText: String) {
+        _currentWord.value = newText
+    }
+
+
 
     fun isWrittenWordCorrect(recognizedText: String): Boolean{
 
         val currentWord = currentFlashcard.value?.word
-
+        updateCurrentWord(currentWord.toString())
+        updateWrittenText(recognizedText)
 
         if(currentWord?.let { areBanglaStringsEqual(it, recognizedText) } == true){
 
@@ -165,6 +184,7 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         }else{
 
             markCurrentFlashcard(false)
+
             return false
         }
     }

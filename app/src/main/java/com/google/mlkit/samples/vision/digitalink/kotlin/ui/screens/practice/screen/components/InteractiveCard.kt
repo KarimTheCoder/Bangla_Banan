@@ -57,6 +57,8 @@ import java.util.Locale
 @Composable
 fun TwoBoxesWithLines0(viewModel: PracticeUIViewModel, cardViewModel: FlashcardViewModel) {
     val currentFlashcard by cardViewModel.currentFlashcard.observeAsState()
+    val currentWord by cardViewModel.currentWord.observeAsState()
+    val writtenText by cardViewModel.writtenText.observeAsState()
 
     val isVisible by viewModel.isVisible.collectAsState()
 
@@ -68,6 +70,7 @@ fun TwoBoxesWithLines0(viewModel: PracticeUIViewModel, cardViewModel: FlashcardV
 
     val backgroundColor by viewModel.backgroundColor.collectAsState(initial = Color.LightGray)
 
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -96,8 +99,14 @@ fun TwoBoxesWithLines0(viewModel: PracticeUIViewModel, cardViewModel: FlashcardV
             SlideInWordCard(scale = scale, isVisible = isVisible, currentFlashcard,cardViewModel)
         }else{
 
+
             WordCard(scale = scale, currentFlashcard,cardViewModel)
-        }
+
+
+
+            LaunchedEffect(writtenText, currentWord) {
+                Toast.makeText(context, "Written: $writtenText Correct: $currentWord", Toast.LENGTH_LONG).show()
+            }     }
 
 
     }
@@ -305,7 +314,7 @@ fun RevealTextButton(currentFlashcard: Flashcard?) {
         // IconButton
         IconButton(onClick = { isTextVisible = !isTextVisible }) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.outline_lock_24),
+                imageVector = ImageVector.vectorResource(id = R.drawable.rounded_lightbulb_24),
                 tint = Color.Black,
                 contentDescription = "Reveal text"
             )

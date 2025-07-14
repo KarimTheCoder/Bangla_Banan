@@ -15,9 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.ListItemWithTrail
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.model.FlashcardSessionItem
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.FlashcardSessionItemView
 
 @Composable
 fun ResultUI(items: List<FlashcardSessionItem>?, onButton1Click: () -> Unit, onButton2Click: () -> Unit) {

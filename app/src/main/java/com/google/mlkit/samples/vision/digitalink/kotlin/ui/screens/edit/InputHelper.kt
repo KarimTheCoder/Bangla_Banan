@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -103,13 +104,14 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
 
 
         // Observe lessons only when lessonId is non-null
-        val lessons = lessonId?.let {
-            cardViewModel.getFlashcardsByLessonId(it).observeAsState(emptyList()).value
-        } ?: emptyList()
+        val flashcards by cardViewModel.allFlashcards.observeAsState(emptyList())
 
+        LaunchedEffect(lessonId) {
+            cardViewModel.loadFlashcardsByLessonId(lessonId)
+        }
         //val lessons by cardViewModel.allFlashcards.observeAsState(emptyList())
 
-        DemoTrailList(lessons)
+        DemoTrailList(flashcards, cardViewModel)
     }
 }
 
@@ -127,7 +129,7 @@ fun InfoTextWithIcon(info: String) {
             Icon(
                 imageVector = Icons.Default.Info, // Built-in info icon
                 contentDescription = "Info icon",
-                tint = Color.Blue,
+                tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text

@@ -168,8 +168,8 @@ class AppRepository(private val appDao: AppDao) {
         Log.d("FlashcardSession", "Half count for each category: $halfCount")
 
         // Fetch familiarized and not familiarized flashcards with the half count limit
-        val familiarizedFlashcards = appDao.getFamiliarizedFlashcards(halfCount, lessonId)
-        Log.d("FlashcardSession", "Fetched familiarized flashcards: ${familiarizedFlashcards.size}")
+        val familiarizedFlashcards = appDao.getDueCards(halfCount, lessonId)
+        Log.d("FlashcardSession", "Fetched due flashcards: ${familiarizedFlashcards.size}")
 
         val notFamiliarizedFlashcards = appDao.getNotFamiliarizedFlashcards(halfCount, lessonId)
         Log.d("FlashcardSession", "Fetched not familiarized flashcards: ${notFamiliarizedFlashcards.size}")
@@ -197,7 +197,7 @@ class AppRepository(private val appDao: AppDao) {
         if (remainingNotFamiliarizedNeeded > 0) {
             Log.d("FlashcardSession", "Adding additional familiarized flashcards.")
             additionalFamiliarized.addAll(
-                appDao.getFamiliarizedFlashcards(remainingNotFamiliarizedNeeded, lessonId)
+                appDao.getDueCards(remainingNotFamiliarizedNeeded, lessonId)
                     .filterNot { familiarizedFlashcards.contains(it) }
             )
         }

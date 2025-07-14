@@ -18,11 +18,12 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.scr
 @Composable
 fun PracticeScreen(
     navController: NavController,
-    flashcardVM: FlashcardViewModel,
-    practiceVM: PracticeUIViewModel
+    flashcardVM: FlashcardViewModel
 ) {
+    val practiceVM = PracticeUIViewModel()
     // Initialize the ViewModel logic outside the UI
     LaunchedEffect(Unit) {
+
         setupPracticeScreen(practiceVM, flashcardVM)
     }
 
@@ -31,8 +32,8 @@ fun PracticeScreen(
         PracticeTopBar(navController)
         DeterminateLinearProgress(flashcardVM)
         PracticeContent(practiceVM, flashcardVM)
-        BottomTestActions(navController, flashcardVM)
-        PartialBottomSheet(flashcardVM)
+        //BottomTestActions(navController, flashcardVM)
+        //PartialBottomSheet(flashcardVM)
     }
 }
 
@@ -50,7 +51,7 @@ fun setupPracticeScreen(
     val listener = object : StrokeManager.StatusChangedListener {
         override fun onStatusChanged() {
             strokeManager.text?.let {
-                flashcardVM.updateWrittenText(it)
+                flashcardVM.updateStatusText(it)
                 practiceVM.updateText(it)
             }
         }

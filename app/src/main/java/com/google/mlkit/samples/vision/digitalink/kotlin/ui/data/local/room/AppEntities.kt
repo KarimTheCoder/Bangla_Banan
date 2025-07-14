@@ -62,7 +62,6 @@ data class Flashcard(
     var dueDate: Long = System.currentTimeMillis(), // Next review date, based on box level
     var familiarityCount: Int = 0
 
-
 )  {
 
 

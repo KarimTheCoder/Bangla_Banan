@@ -3,6 +3,10 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
+import androidx.lifecycle.viewModelScope
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
+import kotlinx.coroutines.launch
 
 
 class EditViewModel: ViewModel() {
@@ -12,7 +16,7 @@ class EditViewModel: ViewModel() {
     val isExpanded: State<Boolean> = _isExpanded
 
     // Mutable state for the information message
-    private var _text = mutableStateOf("This is an information message.")
+    private var _text = mutableStateOf("Tap import to add words in bulk")
     val text: State<String> = _text
 
     // Toggle method to change the state
@@ -26,10 +30,11 @@ class EditViewModel: ViewModel() {
             updateText("This is another information message.")
         }
     }
-
     // Function to update the text
     fun updateText(newText: String) {
-        _text.value = newText
+        _text.value = "$newText was added"
     }
+
+
 
 }

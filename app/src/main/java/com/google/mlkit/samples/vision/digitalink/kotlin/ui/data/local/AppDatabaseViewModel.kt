@@ -65,6 +65,7 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
         return folderData
     }
 
+
     fun deleteFolder(folder: Folder) {
         viewModelScope.launch {
             repository.deleteFolder(folder)
@@ -140,17 +141,28 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     private val _allFlashcards = MutableLiveData<List<Flashcard>>()
     val allFlashcards: LiveData<List<Flashcard>> get() = _allFlashcards
 
+    fun loadFlashcardsByLessonId(lessonId: Long?) {
+        if (lessonId != null) {
+            viewModelScope.launch {
+                _allFlashcards.postValue(repository.getFlashcardsByLessonId(lessonId))
+            }
+        } else {
+            _allFlashcards.postValue(emptyList()) // Clear the list if lessonId is null
+        }
+    }
+
+
     fun insertFlashcard(flashcard: Flashcard) {
         viewModelScope.launch {
             repository.insertFlashcard(flashcard)
-            fetchAllFlashcards() // Refresh the list
+            loadFlashcardsByLessonId(flashcard.lessonOwnerId) // Refresh the list
         }
     }
 
     fun updateFlashcard(flashcard: Flashcard) {
         viewModelScope.launch {
             repository.updateFlashcard(flashcard)
-            fetchAllFlashcards() // Refresh the list
+            loadFlashcardsByLessonId(flashcard.lessonOwnerId) // Refresh the list
         }
     }
 
@@ -173,11 +185,11 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     fun deleteFlashcard(flashcard: Flashcard) {
         viewModelScope.launch {
             repository.deleteFlashcard(flashcard)
-            fetchAllFlashcards() // Refresh the list
+            loadFlashcardsByLessonId(flashcard.lessonOwnerId) // Refresh the list
         }
     }
 
-     fun fetchAllFlashcards() {
+     private fun fetchAllFlashcards() {
         viewModelScope.launch {
             _allFlashcards.value = repository.getAllFlashcards()
         }

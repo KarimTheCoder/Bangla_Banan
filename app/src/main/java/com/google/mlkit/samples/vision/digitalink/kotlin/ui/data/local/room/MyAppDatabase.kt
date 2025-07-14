@@ -15,11 +15,13 @@ abstract class MyAppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): MyAppDatabase {
             return INSTANCE ?: synchronized(this) {
+
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MyAppDatabase::class.java,
                     "flashcard_database"
                 ).build()
+
                 INSTANCE = instance
                 instance
             }

@@ -2,9 +2,9 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.MainScaffold
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.MyDrawerLayout
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.components.HomeDrawer
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.lesson.components.HomeScaffold
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 
 
@@ -15,8 +15,8 @@ fun LessonScreen(
     flashcardVM: FlashcardViewModel
 ){
 
-    MyDrawerLayout (viewModel){ drawerState, scope ->
-        MainScaffold(navController, drawerState, scope,viewModel,flashcardVM)
+    HomeDrawer (viewModel){ drawerState, scope ->
+        HomeScaffold(navController, drawerState, scope,viewModel,flashcardVM)
     }
 
 }

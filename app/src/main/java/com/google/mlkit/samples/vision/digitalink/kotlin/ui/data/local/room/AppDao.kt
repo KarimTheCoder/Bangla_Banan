@@ -104,7 +104,7 @@ interface AppDao {
 
     // Function to get a specific number of familiarized flashcards
     @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime AND familiarityCount >= 5 AND lessonOwnerId = :lessonId LIMIT :limit")
-    suspend fun getFamiliarizedFlashcards(limit: Int, lessonId: Long, currentTime: Long = System.currentTimeMillis()): List<Flashcard>
+    suspend fun getDueCards(limit: Int, lessonId: Long, currentTime: Long = System.currentTimeMillis()): List<Flashcard>
 
     // Function to get a specific number of not familiarized flashcards
     @Query("SELECT * FROM flashcard_table WHERE familiarityCount < 5 AND lessonOwnerId = :lessonId LIMIT :limit")
