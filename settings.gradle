@@ -1,2 +1,10 @@
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal() // Add this for plugin resolution
+    }
+}
 include ':app'
 rootProject.name = "ML Kit Digital Ink Recognition Demo"
