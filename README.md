@@ -71,7 +71,18 @@ If you're an Android developer looking for an **open-source project to contribut
 Contributions are welcome. Please open an issue first to discuss what you would like to change.
 
 ---
+## ⬇️ Download the App
 
+You can download the latest prototype APK directly from GitHub Releases:
+
+* **[Download Bangla Spelling App APK (v0.1.0)](https://github.com/KarimTheCoder/Bangla_Banan/releases/download/v0.1.0/banan_app_prototype.apk)**
+
+---
+
+## 🔗 Check out the latest releases here:
+[https://github.com/KarimTheCoder/Bangla_Banan/releases](https://github.com/KarimTheCoder/Bangla_Banan/releases)
+
+---
 ## ⚖️ License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
