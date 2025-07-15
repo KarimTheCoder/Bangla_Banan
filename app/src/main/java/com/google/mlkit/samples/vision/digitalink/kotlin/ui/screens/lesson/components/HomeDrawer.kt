@@ -37,10 +37,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.InsertSampleData
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
+import com.samsulkarim.bananapp.R
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -113,7 +113,7 @@ fun DrawerContent(
             val folderName = remember { mutableStateOf("") }
 
 
-            InsertSampleData(viewModel = viewModel, LocalContext.current)
+
 
             Button(
                 onClick = { isDialogOpen.value = true },
@@ -156,12 +156,12 @@ fun FolderNameInputDialog(
     if (isDialogOpen.value) {
         AlertDialog(
             onDismissRequest = { isDialogOpen.value = false },
-            title = { Text("Enter Folder Name") },
+            title = { Text("Create a folder") },
             text = {
                 OutlinedTextField(
                     value = folderName.value,
                     onValueChange = { folderName.value = it },
-                    label = { Text("Folder Name") },
+                    label = { Text("Type folder Name") },
                     modifier = Modifier.fillMaxWidth()
                 )
             },

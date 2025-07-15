@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">ML Kit Digital Ink Recognition Demo</string>
+    <string name="app_name" translatable="false">Banan App</string>
     <string name="title_activity_main" translatable="false">Banan App</string>
     <string name="clear" translatable="false">Clear</string>
     <string name="title_activity_edit">EditActivity</string>

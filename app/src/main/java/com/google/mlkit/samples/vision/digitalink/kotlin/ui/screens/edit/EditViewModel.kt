@@ -27,7 +27,7 @@ class EditViewModel: ViewModel() {
 
             updateText("This is an information message.")
         }else{
-            updateText("This is another information message.")
+            updateText("Import functionality is not implemented. Use type instead")
         }
     }
     // Function to update the text

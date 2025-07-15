@@ -45,13 +45,13 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.google.mlkit.samples.vision.digitalink.R
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.CorrectAnimation
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.lottie.WrongAnimation
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeUIViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
+import com.samsulkarim.bananapp.R
 import java.util.Locale
 
 @Composable

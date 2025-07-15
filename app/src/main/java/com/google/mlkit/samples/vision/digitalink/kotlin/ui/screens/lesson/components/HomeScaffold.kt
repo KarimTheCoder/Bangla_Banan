@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -36,9 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.InsertSampleData
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.SegmentedButton
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.SessionTopBar
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoNormalList
@@ -71,6 +74,8 @@ fun HomeScaffold(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+
+            val allFolders by viewModel.allFolders.observeAsState(emptyList())
             Column {
                 SegmentedButton()
 
@@ -97,19 +102,46 @@ fun HomeScaffold(
                         Text("Entered edit mode")
                     }
                 }
+                if (allFolders.isEmpty()) {
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "No folders found")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        InsertSampleData(viewModel = viewModel, context = LocalContext.current)
+                    }
+                }
+
 
                 DemoNormalList(navController,viewModel,flashcardVM)
+
+
+
             }
 
             // FAB with icon and text at the bottom-right
-            ExtendedFloatingActionButton(
-                icon = { Icon(Icons.Default.Add, contentDescription = "Add") },
-                text = { Text("Add") },
-                onClick = { isDialogOpen = true },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            )
+
+
+
+
+            if (allFolders.isNotEmpty()) {
+                ExtendedFloatingActionButton(
+                    icon = { Icon(Icons.Default.Add, contentDescription = "Add") },
+                    text = { Text("Add") },
+                    onClick = { isDialogOpen = true },
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(16.dp))
+
+            }
+
+
+
+
 
 
             val folderId by viewModel.folderId.observeAsState()
@@ -119,13 +151,13 @@ fun HomeScaffold(
             if (isDialogOpen) {
                 AlertDialog(
                     onDismissRequest = { isDialogOpen = false },
-                    title = { Text("Enter Text") },
+                    title = { Text("Create a lesson") },
                     text = {
                         Column {
                             OutlinedTextField(
                                 value = inputText,
                                 onValueChange = { inputText = it },
-                                label = { Text("Input") },
+                                label = { Text("Type name") },
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }

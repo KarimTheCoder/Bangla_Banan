@@ -58,7 +58,7 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
         OutlinedTextField(
             value = text,
             onValueChange = { newText -> text = newText },
-            label = { Text("Enter text") },
+            label = { Text("Create a flashcard") },
             placeholder = { Text("Type here...") },
             trailingIcon = {
                 if (text.isNotEmpty()) {
@@ -83,11 +83,14 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
         // Pass the text value to the button's onClick function
         AddButton(onClick = {
 
-            viewModel.updateText(text)
+            val formattedText = text.trim()
+            text = ""
+
+            viewModel.updateText(formattedText)
 
             val flashcard = lessonId?.let {
 
-                Flashcard(word = text, definition = text, lessonOwnerId = it)
+                Flashcard(word = formattedText, definition = formattedText, lessonOwnerId = it)
 
             }
 

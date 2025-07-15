@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    namespace = "com.google.mlkit.samples.vision.digitalink"
+    namespace = "com.samsulkarim.bananapp"
     compileSdk = 34
     buildToolsVersion = "34.0.0"
 
     defaultConfig {
-        applicationId = "com.google.mlkit.samples.vision.digitalink"
+        applicationId = "com.samsulkarim.bananapp"
         minSdk = 26
         targetSdk = 34
         multiDexEnabled = true
