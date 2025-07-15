@@ -8,10 +8,8 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.MyXm
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeUIViewModel
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.BottomTestActions
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.DeterminateLinearProgress
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.HorizontalLayoutWithTextButtonAndMatchButton
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.PartialBottomSheet
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.PracticeTopBar
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.screen.components.TwoBoxesWithLines0
 
@@ -30,7 +28,7 @@ fun PracticeScreen(
     Column {
         // Organized sections into smaller composables
         PracticeTopBar(navController)
-        DeterminateLinearProgress(flashcardVM)
+        DeterminateLinearProgress(flashcardVM,navController)
         PracticeContent(practiceVM, flashcardVM)
         //BottomTestActions(navController, flashcardVM)
         //PartialBottomSheet(flashcardVM)

@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
@@ -46,8 +45,13 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.Fla
 fun NormalList(
     titles: List<Lesson>,
     onItemClick: (Lesson) -> Unit,
-    viewModel: AppDatabaseViewModel
+    viewModel: AppDatabaseViewModel,
+    isEdit: Boolean
 ) {  // Add onItemClick callback
+
+
+
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -70,11 +74,11 @@ fun NormalList(
                 onItemClick = {
 
 
-                onItemClick(lesson)
-                viewModel.setLessonId( lesson.lessonId)
+                    onItemClick(lesson)
+                    viewModel.setLessonId(lesson.lessonId)
 
 
-            }
+                },isEdit
             )
 
 //            NormalListItem(title = title.lessonName, onItemClick = {
@@ -121,10 +125,14 @@ fun NormalListItem(
     level2Progress: Float,
     level2Text: String,
     additionalText: String,
-    onItemClick: () -> Unit
+    onItemClick: () -> Unit,
+    isEdit: Boolean
     // New parameter for the text before the dropdown icon
 ) {
     var isDropdownExpanded by remember { mutableStateOf(false) }
+
+    val editModeColor = MaterialTheme.colorScheme.tertiaryContainer // Light orange for edit mode
+    val normalColor = MaterialTheme.colorScheme.surfaceVariant
 
     Card(
         modifier = Modifier
@@ -132,7 +140,7 @@ fun NormalListItem(
             .clickable { onItemClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+            containerColor = if (isEdit) normalColor else editModeColor
         )
     ) {
         Column(
@@ -214,7 +222,8 @@ fun ProgressBarWithText(progress: Float, text: String) {
 fun DemoNormalList(
     navController: NavController,
     viewModel: AppDatabaseViewModel,
-    flashcardVM: FlashcardViewModel
+    flashcardVM: FlashcardViewModel,
+    isEdit: Boolean
 ) {
 
     val myViewModel: MainViewModel = viewModel()
@@ -250,5 +259,5 @@ fun DemoNormalList(
             Log.d("TitleListDemo", "Clicked on: ${title.lessonName} going to Edit")
         }
 
-    }, viewModel)
+    }, viewModel, isEdit)
 }

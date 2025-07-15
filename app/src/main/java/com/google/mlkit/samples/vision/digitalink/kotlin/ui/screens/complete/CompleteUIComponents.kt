@@ -60,8 +60,7 @@ fun ToggleSegmentedButton(navController: NavController, flashcardVM: FlashcardVi
 
             ResultUI(
                 sessionItems,
-                onButton1Click = { /* Do something */ },
-                onButton2Click = { /* Do something */ }
+                onButton1Click = { navController.navigate("practice_screen") },
             )
         }
     }

@@ -66,8 +66,9 @@ fun HomeScaffold(
     val myViewModel: MainViewModel = viewModel()
     val isEdit by myViewModel.isPractice.collectAsState()
 
+
     Scaffold(
-        topBar = { SessionTopBar(drawerState, scope) }
+        topBar = { SessionTopBar(drawerState, scope) },
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -96,10 +97,10 @@ fun HomeScaffold(
                             imageVector = Icons.Default.Info,
                             contentDescription = "Info",
                             modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = MaterialTheme.colorScheme.tertiary
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        Text("Entered edit mode")
+                        Text("Edit mode: click on a lesson to edit!")
                     }
                 }
                 if (allFolders.isEmpty()) {
@@ -117,7 +118,7 @@ fun HomeScaffold(
                 }
 
 
-                DemoNormalList(navController,viewModel,flashcardVM)
+                DemoNormalList(navController,viewModel,flashcardVM,isEdit)
 
 
 

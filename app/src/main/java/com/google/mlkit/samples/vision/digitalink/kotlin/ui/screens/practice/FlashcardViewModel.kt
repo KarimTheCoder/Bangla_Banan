@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import java.text.Normalizer
 
 
-class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
+class FlashcardViewModel(private val repository: AppRepository, ):ViewModel() {
 
 
     // MutableLiveData for lesson ID
@@ -280,9 +280,13 @@ class FlashcardViewModel(private val repository: AppRepository):ViewModel() {
         _sessionProgress.value = progress
 
         // Trigger endFunction if progress reaches 100%
-        if (progress >= 100f) {
+        if (progress >= 1f) {
             endSession()
+
         }
+    }
+     fun resetSessionProgress() {
+        _sessionProgress.value = 0f
     }
 
 
