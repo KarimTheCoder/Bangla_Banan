@@ -115,7 +115,7 @@ class PracticeUIViewModel: ViewModel() {
 
         strokeManager.reset()
         drawingViewRef.value?.clear()
-        updateStatusText("")
+        updateStatusText("Ready!")
 
     }
 

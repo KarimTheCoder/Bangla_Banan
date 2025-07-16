@@ -50,7 +50,15 @@ fun setupPracticeScreen(
         override fun onStatusChanged() {
             strokeManager.text?.let {
                 flashcardVM.updateStatusText(it)
-                practiceVM.updateStatusText(it)
+                if(it.isEmpty()){
+
+                    practiceVM.updateStatusText("Ready!")
+                }else{
+                    practiceVM.updateStatusText(it)
+
+
+                }
+
             }
         }
     }

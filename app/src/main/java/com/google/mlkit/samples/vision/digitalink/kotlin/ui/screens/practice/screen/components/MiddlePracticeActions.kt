@@ -51,7 +51,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
         TextButton(
             onClick = {  strokeManager.reset()
                 drawingViewRef.value?.clear()
-                viewModel.updateStatusText("")
+                viewModel.updateStatusText("Ready!")
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
@@ -68,7 +68,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
                 CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Initializing(needs internet)...",
+                    text = "Setting up first time...",
                     style = MaterialTheme.typography.bodyMedium
                 )
 
