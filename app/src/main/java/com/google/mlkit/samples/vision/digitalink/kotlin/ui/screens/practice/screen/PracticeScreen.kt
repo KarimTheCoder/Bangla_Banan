@@ -50,7 +50,7 @@ fun setupPracticeScreen(
         override fun onStatusChanged() {
             strokeManager.text?.let {
                 flashcardVM.updateStatusText(it)
-                practiceVM.updateText(it)
+                practiceVM.updateStatusText(it)
             }
         }
     }

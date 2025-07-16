@@ -27,10 +27,21 @@ class StrokeManager {
     fun onStatusChanged()
   }
 
-  /** Interface to register to be notified of changes in the downloaded model state.  */
+  /** Interface to register to be notified  of changes in the downloaded model state.  */
   interface DownloadedModelsChangedListener {
     /** This method is called when the downloaded models changes.  */
     fun onDownloadedModelsChanged(downloadedLanguageTags: Set<String>)
+  }
+
+  interface DownloadStatusListener {
+    fun onDownloadStarted()
+    fun onDownloadSucceeded()
+    fun onDownloadFailed(error: String)
+  }
+  private var downloadStatusListener: DownloadStatusListener? = null
+
+  fun setDownloadStatusListener(listener: DownloadStatusListener?) {
+    this.downloadStatusListener = listener
   }
 
   // For handling recognition and model downloading.
@@ -200,13 +211,21 @@ class StrokeManager {
 
   fun download(): Task<Nothing?> {
     status = "Download started."
+    downloadStatusListener?.onDownloadStarted()
+
     return modelManager
       .download()
-      .addOnSuccessListener { refreshDownloadedModelsStatus() }
+      .addOnSuccessListener {
+        downloadStatusListener?.onDownloadSucceeded()
+        refreshDownloadedModelsStatus()
+      }
+      .addOnFailureListener { error ->
+        downloadStatusListener?.onDownloadFailed(error.message ?: "Unknown error")
+      }
       .onSuccessTask(
         SuccessContinuation { status: String? ->
           this.status = status
-          return@SuccessContinuation Tasks.forResult(null)
+          Tasks.forResult(null)
         }
       )
   }

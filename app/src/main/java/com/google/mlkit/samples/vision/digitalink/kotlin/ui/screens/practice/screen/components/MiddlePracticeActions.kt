@@ -5,11 +5,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -27,7 +31,15 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
 ) {
     val drawingViewRef = viewModel.drawingViewRef
 
-    val text by viewModel.text.observeAsState("")
+    val statusText by viewModel.statusText.observeAsState("")
+    val status by viewModel.status.collectAsState()
+    Log.i("PracticeUIViewModel",status)
+
+    val isLoading by viewModel.isLoading.collectAsState()
+    Log.i("PracticeUIViewModel","isLoading: $isLoading")
+
+
+
 
     Row(
         modifier = Modifier
@@ -39,7 +51,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
         TextButton(
             onClick = {  strokeManager.reset()
                 drawingViewRef.value?.clear()
-                viewModel.updateText("")
+                viewModel.updateStatusText("")
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
@@ -49,13 +61,26 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
         // Spacer with weight to push the Text to the center
         Spacer(modifier = Modifier.weight(1f))
 
-        // Centered Text
-        Text(
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.align(Alignment.CenterVertically)
-        )
 
+        // Centered Text
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Initializing(needs internet)...",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+
+                viewModel.updateStatusText("Ready!")
+
+            } else {
+                Text(
+                    text = statusText,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        }
         // Spacer with weight to push the Match Button to the end
         Spacer(modifier = Modifier.weight(1f))
 
@@ -94,12 +119,7 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
 
 
                     }
-
-
                 }
-
-
-
             },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {

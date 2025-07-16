@@ -22,10 +22,16 @@ class PracticeUIViewModel: ViewModel() {
 
     // MutableLiveData to hold the string value
     private val _text = MutableLiveData("Initial Value")
-    val text: LiveData<String> = _text
+    val statusText: LiveData<String> = _text
+
+    private val _status = MutableStateFlow("Download started...")
+    val status: StateFlow<String> = _status
+
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     // Function to update the text
-    fun updateText(newText: String) {
+    fun updateStatusText(newText: String) {
         _text.value = newText
     }
 
@@ -35,11 +41,28 @@ class PracticeUIViewModel: ViewModel() {
 
 
 
-    fun initializeDrawingRecognition(){
-
-        strokeManager.setActiveModel(BANGLA_LANG_CODE) // Sets recognized language
+    fun initializeDrawingRecognition() {
+        strokeManager.setActiveModel(BANGLA_LANG_CODE)
         strokeManager.download()
         strokeManager.reset()
+
+        strokeManager.setDownloadStatusListener(object : StrokeManager.DownloadStatusListener {
+            override fun onDownloadStarted() {
+                _status.value = "Download started..."
+                _isLoading.value = true
+            }
+
+            override fun onDownloadSucceeded() {
+                _status.value = "Ready!"
+                _text.value = "Ready!"
+                _isLoading.value = false
+            }
+
+            override fun onDownloadFailed(error: String) {
+                _status.value = "Download failed: check internet!"
+                _isLoading.value = false
+            }
+        })
     }
 
     fun recognizeClick(): Task<String?> {
@@ -92,7 +115,7 @@ class PracticeUIViewModel: ViewModel() {
 
         strokeManager.reset()
         drawingViewRef.value?.clear()
-        updateText("")
+        updateStatusText("")
 
     }
 

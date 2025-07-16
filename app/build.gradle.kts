@@ -16,8 +16,8 @@ android {
         minSdk = 26
         targetSdk = 34
         multiDexEnabled = true
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "0.2.0"
         setProperty("archivesBaseName", "vision-digital-ink")
         testApplicationId = "com.google.mlkit.vision.digitalink"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
