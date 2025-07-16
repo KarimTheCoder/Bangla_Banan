@@ -86,7 +86,7 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
             val formattedText = text.trim()
             text = ""
 
-            viewModel.updateText(formattedText)
+            viewModel.updateText("$formattedText was added")
 
             val flashcard = lessonId?.let {
 

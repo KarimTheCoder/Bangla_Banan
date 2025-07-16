@@ -25,14 +25,14 @@ class EditViewModel: ViewModel() {
 
         if(!isExpanded){
 
-            updateText("This is an information message.")
+            updateText("Tap import to add words in bulk")
         }else{
             updateText("Import functionality is not implemented. Use type instead")
         }
     }
     // Function to update the text
     fun updateText(newText: String) {
-        _text.value = "$newText was added"
+        _text.value = "$newText"
     }
 
 
