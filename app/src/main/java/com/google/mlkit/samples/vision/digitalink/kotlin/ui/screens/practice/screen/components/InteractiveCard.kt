@@ -51,7 +51,9 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flas
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.FlashcardViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.PracticeUIViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
+import com.google.mlkit.samples.vision.digitalink.utils.TTSHelper
 import com.samsulkarim.bananapp.R
+import kotlinx.coroutines.delay
 import java.util.Locale
 
 @Composable
@@ -105,8 +107,12 @@ fun TwoBoxesWithLines0(viewModel: PracticeUIViewModel, cardViewModel: FlashcardV
 
 
             LaunchedEffect(writtenText, currentWord) {
-                Toast.makeText(context, "Written: $writtenText Correct: $currentWord", Toast.LENGTH_LONG).show()
-            }     }
+                if (writtenText != "No value" || currentWord != "No value") {
+                    Toast.makeText(context, "Written: $writtenText Correct: $currentWord", Toast.LENGTH_LONG).show()
+                }
+            }
+
+        }
 
 
     }
@@ -132,6 +138,15 @@ fun SlideInWordCard(
 
 @Composable
 private fun WordCard(scale: Float, currentFlashcard: Flashcard?, cardViewModel: FlashcardViewModel) {
+
+    LaunchedEffect(Unit) {
+        delay(1000L) // Wait for 1 second
+
+        if (cardViewModel.currentWord.value.toString().isNotEmpty()) {
+            cardViewModel.triggerIconClick()
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -192,106 +207,48 @@ private fun WordCard(scale: Float, currentFlashcard: Flashcard?, cardViewModel: 
 @Composable
 fun AudioIconButton(currentFlashcard: Flashcard?, cardViewModel: FlashcardViewModel) {
 
-
     val onIconClick by cardViewModel.onIconClick.collectAsState()
-    //todo: null check
     val currentWord = currentFlashcard?.word
+
+    val context = LocalContext.current
+    val ttsHelper = remember { TTSHelper(context) }
 
     // Controls whether to show the animation or the icon
     var showAnimation by remember { mutableStateOf(false) }
 
-    // Lottie composition for the animation
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.sound))
-    val progress by animateLottieCompositionAsState(
-        composition = composition,
-        isPlaying = showAnimation
-    )
+    val progress by animateLottieCompositionAsState(composition, isPlaying = showAnimation)
 
-
-
-    val context = LocalContext.current
-    var tts: TextToSpeech? by remember { mutableStateOf(null) }
-
-    DisposableEffect(context) {
-        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                // Set engine to Google TTS
-                val googleTtsEngine = "com.google.android.tts"
-
-                try {
-                    // Force using Google TTS engine
-                    tts?.setEngineByPackageName(googleTtsEngine)
-                    Log.d("TTS", "Using Google TTS engine.")
-                } catch (e: Exception) {
-                    Log.e(
-                        "TTS",
-                        "Google TTS engine is not available. Falling back to default engine."
-                    )
-                    Toast.makeText(
-                        context,
-                        "Google TTS engine not available. Using default engine.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-
-                // Check if Bengali language is available
-                val langStatus = tts?.isLanguageAvailable(Locale("bn"))
-                if (langStatus == TextToSpeech.LANG_AVAILABLE) {
-                    tts?.language = Locale("bn")
-                    Log.d("TTS", "Bengali language is available.")
-                } else {
-                    Log.e("TTS", "Bengali language is not available, falling back to English.")
-                    tts?.language = Locale("en") // Fallback to English if Bengali is unavailable
-                }
-            } else {
-                Log.e("TTS", "TextToSpeech initialization failed.")
-            }
-        })
-
+    DisposableEffect(Unit) {
         onDispose {
-            // Shutdown TTS when composable is disposed
-            tts?.shutdown()
+            ttsHelper.shutdown()
         }
     }
 
-    // Trigger the delay within a LaunchedEffect when showAnimation changes to true
     LaunchedEffect(onIconClick) {
         if (onIconClick) {
-
-            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
-
-
+            ttsHelper.speak(currentWord)
             showAnimation = true
-            kotlinx.coroutines.delay(2000) // Wait for the animation duration
+            delay(2000)
             showAnimation = false
             cardViewModel.resetIconClick()
         }
     }
 
-    // IconButton with logic to toggle between icon and animation
     IconButton(
-        onClick = {
-
-            cardViewModel.triggerIconClick()
-
-
-//            tts?.speak(currentWord, TextToSpeech.QUEUE_FLUSH, null, null)
-//            showAnimation = true // Start animation when button is clicked
-        },
+        onClick = { cardViewModel.triggerIconClick() },
         modifier = Modifier.fillMaxSize()
     ) {
         if (showAnimation) {
-            // Display Lottie animation
             LottieAnimation(
                 composition = composition,
                 progress = progress,
                 modifier = Modifier.size(64.dp)
             )
         } else {
-            // Display icon
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.outline_hearing_24),
-                contentDescription = "Favorite icon",
+                contentDescription = "Audio icon",
                 tint = Color.Black,
                 modifier = Modifier.size(24.dp)
             )

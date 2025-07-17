@@ -2,6 +2,7 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.sc
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.NavController
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.MyXmlButtonView
@@ -32,6 +33,14 @@ fun PracticeScreen(
         PracticeContent(practiceVM, flashcardVM)
         //BottomTestActions(navController, flashcardVM)
         //PartialBottomSheet(flashcardVM)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            flashcardVM.updateStatusText("Initial Value")
+            flashcardVM.updateWrittenText("No value")
+            flashcardVM.updateCurrentWord("No value")
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
@@ -10,9 +11,11 @@ import com.google.android.gms.tasks.Task
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.DrawingView
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.draw.StrokeManager
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.practice.flashcard.CardState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class PracticeUIViewModel: ViewModel() {
@@ -20,9 +23,36 @@ class PracticeUIViewModel: ViewModel() {
     val BANGLA_LANG_CODE: String = "bn"
     val strokeManager = StrokeManager()
 
+    private var loadingJob: Job? = null
+
     // MutableLiveData to hold the string value
-    private val _text = MutableLiveData("Initial Value")
-    val statusText: LiveData<String> = _text
+
+    private val loadingMessages = listOf(
+        "Setting up first time...",
+        "Preparing strokes...",
+        "Downloading setup files...",
+        "Keep internet on...",
+        "Getting things ready...",
+        "Fetching starter files...",
+        "Loading resources...",
+        "Unpacking assets...",
+        "One-time setup...",
+        "Hang tight...",
+        "Warming things up...",
+        "Starting your experience...",
+        "Almost ready...",
+        "Optimizing launch...",
+        "Bringing things to life...",
+        "Setting things in motion...",
+        "Just a quick setup...",
+        "Stay connected...",
+        "Finalizing config...",
+        "Syncing essentials..."
+    )
+
+
+    private val _statusText = MutableLiveData("Initial Value")
+    val statusText: LiveData<String> = _statusText
 
     private val _status = MutableStateFlow("Download started...")
     val status: StateFlow<String> = _status
@@ -32,7 +62,26 @@ class PracticeUIViewModel: ViewModel() {
 
     // Function to update the text
     fun updateStatusText(newText: String) {
-        _text.value = newText
+        _statusText.value = newText
+    }
+
+    fun startLoadingMessages() {
+        loadingJob?.cancel() // Cancel previous job if running
+
+        loadingJob = viewModelScope.launch {
+            while (isActive) { // This automatically stops if job is cancelled
+                for (msg in loadingMessages) {
+                    _statusText.value = msg
+                    Log.i("PracticeUIViewModel", "Loading message: $msg")
+                    delay(7000L)
+                }
+            }
+        }
+    }
+
+    fun stopLoadingMessages() {
+        loadingJob?.cancel()
+        _statusText.value = "Ready!"
     }
 
 
@@ -54,7 +103,7 @@ class PracticeUIViewModel: ViewModel() {
 
             override fun onDownloadSucceeded() {
                 _status.value = "Ready!"
-                _text.value = "Ready!"
+                _statusText.value = "Ready!"
                 _isLoading.value = false
             }
 

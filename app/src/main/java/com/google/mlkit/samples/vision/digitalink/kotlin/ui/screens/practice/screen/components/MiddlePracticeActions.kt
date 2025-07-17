@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,6 +40,13 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
     Log.i("PracticeUIViewModel","isLoading: $isLoading")
 
 
+    LaunchedEffect(isLoading) {
+        if (isLoading) {
+            viewModel.startLoadingMessages()
+        } else {
+            viewModel.stopLoadingMessages()
+        }
+    }
 
 
     Row(
@@ -66,15 +74,16 @@ fun HorizontalLayoutWithTextButtonAndMatchButton(
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Setting up first time...",
+                    text = statusText,
                     style = MaterialTheme.typography.bodyMedium
                 )
 
-                viewModel.updateStatusText("Ready!")
-
             } else {
+
+
                 Text(
                     text = statusText,
                     style = MaterialTheme.typography.bodyMedium
