@@ -34,10 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.google.mlkit.samples.vision.digitalink.kotlin.ui.activity.InsertSampleData
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.AppDatabaseViewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import com.samsulkarim.bananapp.R
@@ -214,7 +212,7 @@ fun getDrawerItems(items: List<Folder>): List<DrawerItem> {
 
         list.add(
             DrawerItem(it.folderName,it.folderId,
-                icon = { Icon(painter = painterResource(R.drawable.outline_folder_24), contentDescription = "Menu") }, trailingText = "5"))
+                icon = { Icon(painter = painterResource(R.drawable.outline_folder_24), contentDescription = "Menu") }, trailingText = ""))
 
 
     }

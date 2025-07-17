@@ -97,7 +97,7 @@ fun EditTopBar(navController: NavController) {
             }
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = { navController.popBackStack()}) {
                 Icon(Icons.Default.Check, contentDescription = "More options")
             }
         }

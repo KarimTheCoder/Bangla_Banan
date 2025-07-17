@@ -28,16 +28,14 @@ class PracticeUIViewModel: ViewModel() {
     // MutableLiveData to hold the string value
 
     private val loadingMessages = listOf(
-        "Setting up first time...",
         "Preparing strokes...",
-        "Downloading setup files...",
-        "Keep internet on...",
-        "Getting things ready...",
-        "Fetching starter files...",
         "Loading resources...",
         "Unpacking assets...",
         "One-time setup...",
         "Hang tight...",
+        "Getting things ready...",
+        "Setting up first time...",
+        "Fetching starter files...",
         "Warming things up...",
         "Starting your experience...",
         "Almost ready...",

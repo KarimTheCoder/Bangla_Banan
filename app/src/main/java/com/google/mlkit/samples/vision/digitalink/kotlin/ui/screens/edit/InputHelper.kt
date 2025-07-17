@@ -1,5 +1,7 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.screens.edit
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.components.list.DemoTrailList
@@ -42,7 +45,7 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
 
 
 
-
+    val context = LocalContext.current
     val viewModel: EditViewModel = viewModel()
 
     // Observe isExpanded and text from ViewModel
@@ -83,23 +86,26 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
         // Pass the text value to the button's onClick function
         AddButton(onClick = {
 
+
             val formattedText = text.trim()
-            text = ""
+            text = "" // Clear input
 
-            viewModel.updateText("$formattedText was added")
+            val isBangla = formattedText.any { it in '\u0980'..'\u09FF' }
 
-            val flashcard = lessonId?.let {
+            if (isBangla) {
+                viewModel.updateText("$formattedText was added")
 
-                Flashcard(word = formattedText, definition = formattedText, lessonOwnerId = it)
+                val flashcard = lessonId?.let {
+                    Flashcard(word = formattedText, definition = formattedText, lessonOwnerId = it)
+                }
 
-            }
-
-
-            if (flashcard != null) {
+                if (flashcard != null) {
                     cardViewModel.insertFlashcard(flashcard)
-            }else{
-
-                //todo write a log when flashcard is not inserted due to null
+                } else {
+                    Log.e("FlashcardInsert", "Flashcard not inserted: lessonId is null")
+                }
+            } else {
+                Toast.makeText(context, "Please enter Bangla text only.", Toast.LENGTH_SHORT).show()
             }
 
 
