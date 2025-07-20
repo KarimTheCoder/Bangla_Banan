@@ -75,7 +75,7 @@ Contributions are welcome. Please open an issue first to discuss what you would 
 
 You can download the latest prototype APK directly from GitHub Releases:
 
-* **[Download Bangla Spelling App APK (v0.1.0)](https://github.com/KarimTheCoder/Bangla_Banan/releases/download/v0.1.0/banan_app_prototype.apk)**
+* **[Download Bangla Spelling App APK (v0.2.0)](https://github.com/KarimTheCoder/Bangla_Banan/releases/download/v0.2.0/Banana.app.v0.2.0.apk)**
 
 ---
 
