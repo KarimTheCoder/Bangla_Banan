@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.SegmentedButton
@@ -112,6 +113,7 @@ fun EditSegmentedButton() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SetSegmentedButtons(
     optionItems: List<OptionItem>

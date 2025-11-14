@@ -66,27 +66,26 @@ android {
 dependencies {
     // Versions
     val roomVersion = "2.6.1"
-    val composeBomVersion = "2024.10.01"
+    val composeBomVersion = "2024.06.00"
 
     // Core & UI Libraries
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.multidex:multidex:2.0.1")
 
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
-    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.0")
 
     // Compose Libraries
     implementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-    //implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material3:material3:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0")
-    implementation("androidx.compose.runtime:runtime-livedata:1.7.5")
+    implementation("androidx.compose.material3:material3:1.2.1")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("androidx.compose.runtime:runtime-livedata")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeBomVersion"))
@@ -94,13 +93,13 @@ dependencies {
 
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:2.8.3")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
 
     // Lifecycle & Paging
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.paging:paging-common-android:3.3.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 
     // Room (Database)
     implementation("androidx.room:room-runtime:$roomVersion")
@@ -111,15 +110,15 @@ dependencies {
     implementation("com.google.mlkit:digital-ink-recognition:18.1.0")
 
     // Lottie Animation
-    implementation("com.airbnb.android:lottie-compose:6.6.0")
+    implementation("com.airbnb.android:lottie-compose:6.4.0")
 
     // Kotlin & Auto-Value
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.21")
-    implementation("com.google.auto.value:auto-value-annotations:1.11.0")
-    kapt("com.google.auto.value:auto-value:1.11.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.0.20")
+    implementation("com.google.auto.value:auto-value-annotations:1.10.4")
+    kapt("com.google.auto.value:auto-value:1.10.4")
 
     // Additional Libraries
-    implementation("com.google.guava:guava:33.3.1-android")
+    implementation("com.google.guava:guava:33.0.0-android")
 
     // DI
     implementation("com.google.dagger:hilt-android:2.51.1")
