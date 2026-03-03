@@ -1,5 +1,6 @@
 package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,9 +14,10 @@ import kotlinx.coroutines.launch
 
 class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
 
-    // MutableLiveData for folder ID
+    // MutableLiveData for folder ID (the currently selected leaf folder for lessons)
     private val _folderId = MutableLiveData<Long>()
     val folderId: LiveData<Long> = _folderId
+
     // Function to check if folderId is initialized
     fun isFolderIdInitialized(): Boolean {
         return _folderId.value != null
@@ -37,6 +39,65 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     }
 
 
+    // --- Folder Navigation State (for drill-down drawer) ---
+
+    // The folder the user is currently viewing in the drawer (null = root level)
+    private val _currentParentFolder = MutableLiveData<Folder?>(null)
+    val currentParentFolder: LiveData<Folder?> = _currentParentFolder
+
+    // Navigation stack for back navigation in the drawer
+    private val _folderNavigationStack = mutableListOf<Folder?>()
+
+    // The folders currently displayed in the drawer
+    private val _drawerFolders = MutableLiveData<List<Folder>>()
+    val drawerFolders: LiveData<List<Folder>> get() = _drawerFolders
+
+    // The lessons displayed in the drawer for the current sub-folder
+    private val _drawerLessons = MutableLiveData<List<Lesson>>()
+    val drawerLessons: LiveData<List<Lesson>> get() = _drawerLessons
+
+    // Navigate into a folder (drill down)
+    fun navigateIntoFolder(folder: Folder) {
+        _folderNavigationStack.add(_currentParentFolder.value)
+        _currentParentFolder.value = folder
+        refreshDrawerContent()
+    }
+
+    // Navigate up one level in the folder hierarchy
+    fun navigateUp(): Boolean {
+        if (_folderNavigationStack.isEmpty()) return false
+        val parent = _folderNavigationStack.removeAt(_folderNavigationStack.size - 1)
+        _currentParentFolder.value = parent
+        refreshDrawerContent()
+        return true
+    }
+
+    // Check if we can navigate up
+    fun canNavigateUp(): Boolean {
+        return _folderNavigationStack.isNotEmpty()
+    }
+
+    // Get current navigation depth (0 = root)
+    fun getNavigationDepth(): Int {
+        return _folderNavigationStack.size
+    }
+
+    // Refresh the drawer content based on the current parent folder
+    fun refreshDrawerContent() {
+        viewModelScope.launch {
+            val parent = _currentParentFolder.value
+            if (parent == null) {
+                // At root level: show root folders
+                _drawerFolders.value = repository.getRootFolders()
+                _drawerLessons.value = emptyList()
+            } else {
+                // Inside a folder: show sub-folders and lessons
+                _drawerFolders.value = repository.getChildFolders(parent.folderId)
+                _drawerLessons.value = repository.getLessonsByFolderId(parent.folderId)
+            }
+        }
+    }
+
 
     // --- Folder Operations ---
 
@@ -46,14 +107,16 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
     fun insertFolder(folder: Folder) {
         viewModelScope.launch {
             repository.insertFolder(folder)
-            fetchAllFolders() // Refresh the list
+            refreshDrawerContent()
+            fetchAllFolders() // Also refresh allFolders for backward compat
         }
     }
 
     fun updateFolder(folder: Folder) {
         viewModelScope.launch {
             repository.updateFolder(folder)
-            fetchAllFolders() // Refresh the list
+            refreshDrawerContent()
+            fetchAllFolders()
         }
     }
 
@@ -65,15 +128,15 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
         return folderData
     }
 
-
     fun deleteFolder(folder: Folder) {
         viewModelScope.launch {
             repository.deleteFolder(folder)
-            fetchAllFolders() // Refresh the list
+            refreshDrawerContent()
+            fetchAllFolders()
         }
     }
 
-     fun fetchAllFolders() {
+    fun fetchAllFolders() {
         viewModelScope.launch {
             _allFolders.value = repository.getAllFolders()
         }

@@ -125,27 +125,17 @@ fun HomeScaffold(
             }
 
             // FAB with icon and text at the bottom-right
+            val folderId by viewModel.folderId.observeAsState()
 
-
-
-
-            if (allFolders.isNotEmpty()) {
+            if (allFolders.isNotEmpty() && folderId != null) {
                 ExtendedFloatingActionButton(
                     icon = { Icon(Icons.Default.Add, contentDescription = "Add") },
-                    text = { Text("Add") },
+                    text = { Text("Add Lesson") },
                     onClick = { isDialogOpen = true },
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(16.dp))
-
             }
-
-
-
-
-
-
-            val folderId by viewModel.folderId.observeAsState()
 
 
             // Dialog for text input
@@ -166,17 +156,13 @@ fun HomeScaffold(
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                // Handle OK action here, like saving the inputText
-
                                 //todo needs more safety checks
                                 if( folderId != null){
                                     val lesson = Lesson(lessonName = inputText, folderOwnerId = folderId!!,)
                                     viewModel.insertLesson(lesson, folderId!!)
                                 }
 
-
-
-
+                                inputText = ""
                                 isDialogOpen = false
                             }
                         ) {

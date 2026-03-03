@@ -153,21 +153,21 @@ fun InfoTextWithIcon(info: String) {
 @Composable
 fun AddButton(onClick: () -> Unit) {
     Box(
-        modifier = Modifier.fillMaxWidth() // Takes up the full width of the parent
+        modifier = Modifier.fillMaxWidth()
     ) {
         Button(
-            onClick = onClick, // Call the onClick function
+            onClick = onClick,
             modifier = Modifier
-                .align(Alignment.Center) // Centers the button horizontally
+                .align(Alignment.Center)
                 .padding(16.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.Add, // Plus icon
+                    imageVector = Icons.Default.Add,
                     contentDescription = "Add icon",
                     modifier = Modifier.size(20.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Add")
             }
         }

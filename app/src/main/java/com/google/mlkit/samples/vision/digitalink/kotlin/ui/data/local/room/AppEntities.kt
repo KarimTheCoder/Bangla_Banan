@@ -9,14 +9,24 @@ import java.util.Date
 import java.util.Locale
 
 // Folder Entity
-@Entity(tableName = "folder_table")
+@Entity(
+    tableName = "folder_table",
+    foreignKeys = [ForeignKey(
+        entity = Folder::class,
+        parentColumns = ["folderId"],
+        childColumns = ["parentFolderId"],
+        onDelete = ForeignKey.CASCADE
+    )],
+    indices = [Index("parentFolderId")]
+)
 data class Folder(
     @PrimaryKey(autoGenerate = true)
     val folderId: Long = 0,
-    val folderName: String
+    val folderName: String,
+    val parentFolderId: Long? = null // null = root-level folder
 ){
     override fun toString(): String {
-        return "Folder(folderId=$folderId, folderName='$folderName')"
+        return "Folder(folderId=$folderId, folderName='$folderName', parentFolderId=$parentFolderId)"
     }
 }
 

@@ -32,6 +32,14 @@ interface AppDao {
     @Delete
     suspend fun deleteFolder(folder: Folder)
 
+    // Get root-level folders (no parent)
+    @Query("SELECT * FROM folder_table WHERE parentFolderId IS NULL")
+    suspend fun getRootFolders(): List<Folder>
+
+    // Get child folders of a specific folder
+    @Query("SELECT * FROM folder_table WHERE parentFolderId = :parentId")
+    suspend fun getChildFolders(parentId: Long): List<Folder>
+
 
     // --- Lesson CRUD Operations ---
 

@@ -36,6 +36,16 @@ class AppRepository(private val appDao: AppDao) {
         appDao.deleteFolder(folder)
     }
 
+    // Get root-level folders (no parent)
+    suspend fun getRootFolders(): List<Folder> {
+        return appDao.getRootFolders()
+    }
+
+    // Get child folders of a specific parent folder
+    suspend fun getChildFolders(parentId: Long): List<Folder> {
+        return appDao.getChildFolders(parentId)
+    }
+
 
     // --- Lesson Operations ---
 

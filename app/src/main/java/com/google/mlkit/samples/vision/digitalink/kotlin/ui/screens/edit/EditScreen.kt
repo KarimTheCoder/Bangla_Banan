@@ -16,5 +16,4 @@ fun EditScreen(navController: NavController, viewModel: AppDatabaseViewModel) {
         TypeInput(viewModel)
     }
 
-
 }
