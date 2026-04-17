@@ -222,6 +222,15 @@ class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
         }
     }
 
+    fun insertFlashcards(flashcards: List<Flashcard>) {
+        viewModelScope.launch {
+            flashcards.forEach { repository.insertFlashcard(it) }
+            if (flashcards.isNotEmpty()) {
+                loadFlashcardsByLessonId(flashcards.first().lessonOwnerId)
+            }
+        }
+    }
+
     fun updateFlashcard(flashcard: Flashcard) {
         viewModelScope.launch {
             repository.updateFlashcard(flashcard)

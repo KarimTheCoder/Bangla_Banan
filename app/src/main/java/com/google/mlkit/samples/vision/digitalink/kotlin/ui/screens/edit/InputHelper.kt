@@ -43,8 +43,6 @@ import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flas
 @Composable
 fun TypeInput(cardViewModel: AppDatabaseViewModel) {
 
-
-
     val context = LocalContext.current
     val viewModel: EditViewModel = viewModel()
 
@@ -52,10 +50,128 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
     val isExpanded by viewModel.isExpanded
     val info by viewModel.text
 
+    val lessonId by cardViewModel.lessonId.observeAsState()
+
+    if (isExpanded) {
+        // --- Import Mode ---
+        ImportInput(cardViewModel, viewModel, lessonId)
+    } else {
+        // --- Type Mode (existing) ---
+        SingleWordInput(cardViewModel, viewModel, info, lessonId, context)
+    }
+}
+
+@Composable
+private fun ImportInput(
+    cardViewModel: AppDatabaseViewModel,
+    viewModel: EditViewModel,
+    lessonId: Long?
+) {
+    val context = LocalContext.current
+    var importText by remember { mutableStateOf("") }
+    val importResult by viewModel.importResult
+
+    Column {
+        OutlinedTextField(
+            value = importText,
+            onValueChange = { importText = it },
+            label = { Text("Paste words here") },
+            placeholder = { Text("One word per line...\nExample:\nবাংলা\nবানান\nঅভ্যাস") },
+            trailingIcon = {
+                if (importText.isNotEmpty()) {
+                    IconButton(onClick = { importText = "" }) {
+                        Icon(imageVector = Icons.Default.Close, contentDescription = "Clear text")
+                    }
+                }
+            },
+            singleLine = false,
+            minLines = 6,
+            maxLines = 12,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 16.dp)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Info or result text
+        if (importResult.isNotEmpty()) {
+            InfoTextWithIcon(importResult)
+        } else {
+            InfoTextWithIcon("Paste words below, one per line")
+        }
+
+        // Import button
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = {
+                    if (lessonId == null) {
+                        Toast.makeText(context, "No lesson selected", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    val allLines = importText.lines()
+                        .map { it.trim() }
+                        .filter { it.isNotBlank() }
+
+                    val banglaWords = allLines.filter { line ->
+                        line.any { c -> c in '\u0980'..'\u09FF' }
+                    }
+
+                    val skipped = allLines.size - banglaWords.size
+
+                    if (banglaWords.isEmpty()) {
+                        Toast.makeText(context, "No valid Bangla words found", Toast.LENGTH_SHORT).show()
+                        return@Button
+                    }
+
+                    val flashcards = banglaWords.map { word ->
+                        Flashcard(
+                            word = word,
+                            definition = word,
+                            lessonOwnerId = lessonId!!
+                        )
+                    }
+
+                    cardViewModel.insertFlashcards(flashcards)
+                    viewModel.setImportResult(banglaWords.size, skipped)
+                    importText = "" // Clear after import
+                },
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .padding(16.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Import icon",
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = "Import All")
+                }
+            }
+        }
+
+        // Show existing flashcards
+        val flashcards by cardViewModel.allFlashcards.observeAsState(emptyList())
+        LaunchedEffect(lessonId) {
+            cardViewModel.loadFlashcardsByLessonId(lessonId)
+        }
+        DemoTrailList(flashcards, cardViewModel)
+    }
+}
+
+@Composable
+private fun SingleWordInput(
+    cardViewModel: AppDatabaseViewModel,
+    viewModel: EditViewModel,
+    info: String,
+    lessonId: Long?,
+    context: android.content.Context
+) {
     var text by remember { mutableStateOf("") }
-    val textFieldHeight by animateDpAsState(targetValue = if (isExpanded) 140.dp else 80.dp,
-        label = ""
-    ) // Animated height
+    val textFieldHeight by animateDpAsState(targetValue = 80.dp, label = "")
 
     Column {
         OutlinedTextField(
@@ -70,23 +186,18 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
                     }
                 }
             },
-            singleLine = false, // Allow multiline if you want a larger height
+            singleLine = false,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(textFieldHeight) // Apply animated height
+                .height(textFieldHeight)
                 .padding(start = 24.dp, end = 24.dp, top = 16.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp)) // Add space between the TextField and Button
-
+        Spacer(modifier = Modifier.height(16.dp))
         InfoTextWithIcon(info)
-
-        val lessonId by cardViewModel.lessonId.observeAsState()
 
         // Pass the text value to the button's onClick function
         AddButton(onClick = {
-
-
             val formattedText = text.trim()
             text = "" // Clear input
 
@@ -107,19 +218,13 @@ fun TypeInput(cardViewModel: AppDatabaseViewModel) {
             } else {
                 Toast.makeText(context, "Please enter Bangla text only.", Toast.LENGTH_SHORT).show()
             }
-
-
         })
-
 
         // Observe lessons only when lessonId is non-null
         val flashcards by cardViewModel.allFlashcards.observeAsState(emptyList())
-
         LaunchedEffect(lessonId) {
             cardViewModel.loadFlashcardsByLessonId(lessonId)
         }
-        //val lessons by cardViewModel.allFlashcards.observeAsState(emptyList())
-
         DemoTrailList(flashcards, cardViewModel)
     }
 }
@@ -129,19 +234,19 @@ fun InfoTextWithIcon(info: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp) // Takes up the full width of the parent
+            .padding(top = 8.dp)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.align(Alignment.Center) // Centers the Row horizontally
+            modifier = Modifier.align(Alignment.Center)
         ) {
             Icon(
-                imageVector = Icons.Default.Info, // Built-in info icon
+                imageVector = Icons.Default.Info,
                 contentDescription = "Info icon",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(16.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp)) // Space between icon and text
+            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = info,
                 color = Color.Gray,
@@ -150,6 +255,7 @@ fun InfoTextWithIcon(info: String) {
         }
     }
 }
+
 @Composable
 fun AddButton(onClick: () -> Unit) {
     Box(

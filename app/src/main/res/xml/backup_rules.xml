@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!--
+    Backup Rules for Bangla Banan Application
+
+    This file defines which app data should be backed up and restored
+    when the app is reinstalled or restored on a different device.
+    -->
+
+    <!-- Backup all database files in the databases folder -->
+    <include domain="database" path="." />
+
+    <!-- Backup shared preferences -->
+    <include domain="sharedpref" path="." />
+
+    <!-- Backup files in the app's cache directory -->
+    <!-- Note: Cache files are typically not backed up by default,
+         uncomment if you want to include them -->
+    <!-- <include domain="cache" path="." /> -->
+
+    <!-- Backup root app directory files (like downloaded data) -->
+    <include domain="root" path="." />
+
+    <!-- Exclude specific directories that shouldn't be backed up -->
+    <!-- Exclude cache directory to keep backups smaller -->
+    <exclude domain="cache" path="." />
+
+    <!-- Exclude temporary files -->
+    <exclude domain="root" path="temp*" />
+    <exclude domain="root" path=".*" />
+
+    <!-- Exclude external storage (typically not part of app backup) -->
+    <!-- This is handled separately by system -->
+
+</full-backup-content>
+
