@@ -68,7 +68,7 @@ fun HomeScaffold(
 
 
     Scaffold(
-        topBar = { SessionTopBar(drawerState, scope) },
+        topBar = { SessionTopBar(drawerState, scope, viewModel) },
     ) { paddingValues ->
         Box(
             modifier = Modifier

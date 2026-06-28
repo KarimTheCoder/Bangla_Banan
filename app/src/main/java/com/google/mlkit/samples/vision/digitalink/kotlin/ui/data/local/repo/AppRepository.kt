@@ -2,11 +2,34 @@ package com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo
 
 import android.util.Log
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.AppDao
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.AppBackup
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 
 class AppRepository(private val appDao: AppDao) {
+
+    // --- Backup & Restore Operations ---
+
+    suspend fun clearAllData() {
+        appDao.clearAllFlashcards()
+        appDao.clearAllLessons()
+        appDao.clearAllFolders()
+    }
+
+    suspend fun createBackupSnapshot(): AppBackup {
+        val folders = appDao.getAllFolders()
+        val lessons = appDao.getAllLessons()
+        val flashcards = appDao.getAllFlashcards()
+        return AppBackup(folders, lessons, flashcards)
+    }
+
+    suspend fun restoreBackupSnapshot(backup: AppBackup) {
+        clearAllData()
+        backup.folders.forEach { appDao.insertFolder(it) }
+        backup.lessons.forEach { appDao.insertLesson(it) }
+        backup.flashcards.forEach { appDao.insertFlashcard(it) }
+    }
 
 
     // --- Folder Operations ---

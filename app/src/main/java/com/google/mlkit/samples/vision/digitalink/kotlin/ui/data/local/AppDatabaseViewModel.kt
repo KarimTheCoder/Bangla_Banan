@@ -6,13 +6,35 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.repo.AppRepository
+import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.AppBackup
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Flashcard
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Folder
 import com.google.mlkit.samples.vision.digitalink.kotlin.ui.data.local.room.Lesson
 import kotlinx.coroutines.launch
 
 class AppDatabaseViewModel(private val repository: AppRepository):ViewModel() {
+
+    // --- Backup & Restore ---
+
+    suspend fun exportDatabaseToJson(): String {
+        val backup = repository.createBackupSnapshot()
+        return Gson().toJson(backup)
+    }
+
+    suspend fun importDatabaseFromJson(jsonString: String) {
+        val backup = Gson().fromJson(jsonString, AppBackup::class.java)
+        if (backup != null) {
+            repository.restoreBackupSnapshot(backup)
+            refreshDrawerContent() // Refresh UI after import
+            fetchAllFolders()
+            val folderId = _folderId.value
+            if (folderId != null) {
+                fetchAllLessons(folderId)
+            }
+        }
+    }
 
     // MutableLiveData for folder ID (the currently selected leaf folder for lessons)
     private val _folderId = MutableLiveData<Long>()

@@ -40,6 +40,9 @@ interface AppDao {
     @Query("SELECT * FROM folder_table WHERE parentFolderId = :parentId")
     suspend fun getChildFolders(parentId: Long): List<Folder>
 
+    @Query("DELETE FROM folder_table")
+    suspend fun clearAllFolders()
+
 
     // --- Lesson CRUD Operations ---
 
@@ -67,6 +70,9 @@ interface AppDao {
     @Delete
     suspend fun deleteLesson(lesson: Lesson)
 
+    @Query("DELETE FROM lesson_table")
+    suspend fun clearAllLessons()
+
 
     // --- Flashcard CRUD Operations ---
 
@@ -93,6 +99,10 @@ interface AppDao {
     // Delete a Flashcard
     @Delete
     suspend fun deleteFlashcard(flashcard: Flashcard)
+
+    @Query("DELETE FROM flashcard_table")
+    suspend fun clearAllFlashcards()
+
 
     @Query("SELECT * FROM flashcard_table WHERE dueDate <= :currentTime")
     suspend fun getDueFlashcards(currentTime: Long = System.currentTimeMillis()): List<Flashcard>
